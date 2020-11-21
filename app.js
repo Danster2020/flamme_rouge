@@ -8,7 +8,7 @@ app.get("/",function(req, res) {
 });
 app.use("/client", express.static(__dirname + "/client"));
 
-serv.listen(2000);
+serv.listen(2000, "0.0.0.0");
 
 console.log("Server started.")
 
@@ -26,15 +26,29 @@ io.sockets.on('connection', function(socket){
         msg:'hello',
         information: socket.id,
     });
+
+    socket.on("disconnect", function() {
+        delete SOCKET_LIST[socket.id]
+        console.log("player:", socket.id, "left")
+    })
     
  
 });
 
+setInterval(function() {
+    for (var i in SOCKET_LIST) {
+        var socket = SOCKET_LIST[i]
+        socket.emit("connection", {
+            connection_status: "connected",
+        })
+    }
+    
+}, 1000/25)
 
 
 
 // my shit
 
-function randomInt(min, max) {
+function randomNumber(min, max) {
     return Math.floor(Math.random() * max) + min
 }
