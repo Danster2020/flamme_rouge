@@ -5,23 +5,42 @@ body {
 }
 
 header {
+    display: flex;
     background-color: white;
     padding: 10px;
     margin-bottom: 20px;
 }
 
-.board {
-
-}
-
-
 td {
     background-color: white;
     border: solid gray;
-    width: 40px;
-    height: 30px;
+    width: 30px;
+    height: 10px;
 
 }
+
+.game_road {
+    margin-left: 20px;
+    margin-top: 50px;
+}
+
+#left-lane {
+    display: flex;
+}
+
+#right-lane {
+    display: flex;
+}
+
+.tile {
+    margin: 2px;
+    width: 60px;
+    height: 30px;
+    border: solid green 1px;
+    background-color: white;
+    border: solid gray;
+}
+
 
 footer {
     position: absolute;
