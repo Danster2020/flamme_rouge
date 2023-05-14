@@ -60,6 +60,61 @@ function indexOf2dArray(biketofind) {
     return [row, col]; 
 }
 
+
+pathOnDiv("1", 0.1);
+pathOnDiv("2", 0.2);
+pathOnDiv("3", 0.3);
+pathOnDiv("4", 0.4);
+pathOnDiv("5", 0.5);
+pathOnDiv("6", 0.6);
+pathOnDiv("7", 0.7);
+pathOnDiv("8", 0.8);
+pathOnDiv("9", 0.9);
+pathOnDiv("10", 1);
+
+
+function calculateAngle(loc, loc2) {
+    //console.log(loc)
+    //console.log(loc2)
+    //console.log(loc["x"])
+    //console.log(loc["y"])
+    x_length = loc2["x"] - loc["x"]
+    y_length = loc2["y"] - loc["y"]
+    tangent = y_length / x_length
+    point_angle = Math.atan(tangent)*100
+    //console.log(x_length)
+    //console.log(y_length)
+    console.log("angle", point_angle)
+    return point_angle
+
+
+}
+
+
+function pathOnDiv(text, pos)
+{
+   // Get the coordinates of the point that is the fraction 'pos' along the path
+   var  path = document.getElementById("mypath");
+   var  pathLength = path.getTotalLength();
+   var  loc = path.getPointAtLength(pos * pathLength);
+   var  loc2 = path.getPointAtLength(pos + 0.01 * pathLength);
+   rotation = calculateAngle(loc, loc2)
+   amount_of_rotation = "rotate(" + String(rotation) + "deg)"
+    
+   // Make a div
+   var div = document.createElement("div");
+   div.textContent = text;
+   div.setAttribute("class", "tile");
+   div.style.left = loc.x + "px";
+   div.style.top = loc.y + "px";
+
+   console.log("amount of rotation", amount_of_rotation)
+   div.style.transform = amount_of_rotation
+   document.getElementById("left-lane").appendChild(div);
+}
+
+
+
 function updateBoardState() { // not finished
     
     // rensar alla tomma rutor

@@ -33,7 +33,13 @@ td {
 }
 
 .tile {
-    margin: 2px;
+    position: absolute;
+    font-family: sans-serif;
+    text-align: center;
+    display: table-cell;
+    top: -10px;
+
+
     width: 60px;
     height: 30px;
     border: solid green 1px;
@@ -93,3 +99,17 @@ footer:not(:hover) {
     border: solid yellow 2px;
 }
 
+.pathDiv {
+    position: absolute;
+    font-family: sans-serif;
+    font-size: 30px;
+    border: solid 3px blue;
+    width: 40px;
+    height: 40px;
+    margin-left: -19px;
+    margin-top: 70px;
+    text-align: center;
+    border-radius: 50%;
+    display: table-cell;
+    transform: rotate();
+}
