@@ -1,9 +1,0 @@
-
-Rider obj:
-- type_of_rider
-- 
-
-Road Obj:
-- nr_of_lanes
-- []bikes
-- angle (for visual placement)
