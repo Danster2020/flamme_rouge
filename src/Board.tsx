@@ -1,6 +1,25 @@
+import { Player } from "./Game";
 
-export function TicTacToeBoard({ ctx, G, moves }) {
+export function BoardFlammeRouge({ ctx, G, moves, events }) {
+
     const onClick = (id) => moves.clickCell(id);
+    const onRoadTileClick = (id) => moves.selectBikeStart(id);
+
+    function getBikeName(bikeID: string) {
+        const players: { [key: string]: Player } = G.players;
+
+        for (const playerID in players) {
+            const player = players[playerID];
+            if (player.bikeR_ID === bikeID) {
+                return `${player.name}_R`;
+            } else if (player.bikeS_ID === bikeID) {
+                return `${player.name}_S`;
+            }
+        }
+
+        return null;
+    }
+
 
     let winner;
     if (ctx.gameover) {
@@ -39,11 +58,51 @@ export function TicTacToeBoard({ ctx, G, moves }) {
 
     return (
         <>
+
+            <div className="fixed top-0 w-full">
+                <div className="relative flex justify-center gap-2 mb-4">
+                    <div>Stage: {ctx.stage}</div>
+                </div>
+            </div>
+
             <div>
                 <table id="board">
                     <tbody>{tbody}</tbody>
                 </table>
                 {winner}
+            </div>
+
+            <div className="flex">
+                {G.road.map((roadTile, index: number) =>
+
+                    <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10 border-2 border-red-500 bg-black text-white">
+                        <ul className="flex flex-col-reverse">
+                            {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
+
+                                <li key={laneIndex} className="w-20 h-10 border-2 border-green-500 bg-black text-white">
+                                    {roadTile.bikes[laneIndex] ? <span>{getBikeName(roadTile.bikes[laneIndex])}</span> :
+                                        <span>LANE {laneIndex}</span>
+
+                                    }
+                                </li>
+
+                            )}
+                        </ul>
+                    </div>
+
+                )}
+
+            </div>
+
+            <div className="fixed bottom-0 w-full">
+                <div className="relative flex justify-center gap-2 mb-4">
+                    {G.players[0]?.deckR.map((card, index: number) =>
+                        <button key={index} className="block w-20 h-36 bg-gray-400 rounded-lg text-white shadow-xl">
+                            <span className="ml-2">{card}</span>
+                        </button>
+                    )}
+                    {/* {G.players[0]?.deckR[0]} */}
+                </div>
             </div>
         </>
     );

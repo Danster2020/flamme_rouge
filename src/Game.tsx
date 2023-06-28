@@ -1,15 +1,40 @@
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { PlayerView } from 'boardgame.io/core';
+import { v4 as uuid } from 'uuid';
 
+
+// SETUP
 const startDeckR = [1, 2, 3, 4]
 const startDeckS = [1, 2, 3, 4]
+
+const roadTile1 = {
+    lanes: 2,
+    bikes: []
+}
+
+let road = []
+
+for (let index = 0; index < 5; index++) {
+    road.push(roadTile1)
+}
+// ------
+
+export interface Player {
+    name: string;
+    bikeR_ID: string;
+    bikeS_ID: string;
+    hand: number[]; // Replace 'any' with the appropriate type for the hand
+    deckR: any[]; // Replace 'any' with the appropriate type for the deckR
+    deckS: any[]; // Replace 'any' with the appropriate type for the deckS
+}
 
 export const GameFlammeRouge = {
     setup: () => ({
         cells: Array(9).fill(null),
+        road: road,
         players: {
-            '0': { name: "Player 1", hand: [], deckR: startDeckR, deckS: startDeckS },
-            '1': { name: "Player 2", hand: [], deckR: startDeckR, deckS: startDeckS },
+            '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR, deckS: startDeckS } as Player,
+            '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR, deckS: startDeckS } as Player,
         },
     }),
 
@@ -18,12 +43,44 @@ export const GameFlammeRouge = {
 
 
     turn: {
-        minMoves: 1,
-        maxMoves: 1,
+
+        minMoves: 2,
+        maxMoves: 2,
+        stages: {
+            gameSetup: {
+                moves: {
+
+                },
+                start: true,
+                next: 'energy'
+            },
+            energy: {
+                moves: {}
+            }
+        },
     },
 
 
     moves: {
+        selectBikeStart: ({ G, playerID, events }, roadTileIndex) => {
+
+            if (playerID === null) {
+                console.log("spectating player can't place bike!");
+                return
+            }
+
+            const roadTile = G.road[roadTileIndex]
+            const player = G.players[playerID]
+
+            if (roadTile.bikes.length !== roadTile.lanes) {
+                roadTile.bikes.push(player.bikeR_ID)
+            }
+
+            events.setActivePlayers({
+                all: 'energy',
+            });
+        },
+
         clickCell: ({ G, playerID }, id) => {
             if (G.cells[id] !== null) {
                 return INVALID_MOVE;
@@ -61,3 +118,4 @@ function IsVictory(cells) {
 function IsDraw(cells) {
     return cells.filter(c => c === null).length === 0;
 }
+

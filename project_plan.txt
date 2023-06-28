@@ -9,6 +9,8 @@ Road Obj:
 - angle (for visual placement)
 
 Player phases:
+- start
+    - place bikes
 - Energy (all players at the same time) x2
     - choose rider
     - draw 4 cards
