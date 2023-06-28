@@ -1,0 +1,20 @@
+
+Rider obj:
+- type_of_rider
+- 
+
+Road Obj:
+- nr_of_lanes
+- []bikes
+- angle (for visual placement)
+
+Player phases:
+- Energy (all players at the same time) x2
+    - choose rider
+    - draw 4 cards
+    - play a card
+    - recycle rest (put them at the bottom)
+- Movement
+    - reveal cards, move players (all players at same time)
+- End
+    - slip stream, and exhaustion cards
