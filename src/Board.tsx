@@ -1,10 +1,15 @@
-import { Player } from "./Game";
+import { BikerType, Player } from "./Game";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
     const onClick = (id) => moves.clickCell(id);
+
     const onRoadTileClick = (id) => moves.selectBikeStart(id);
+    const onRslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
+    const onSslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
+    const onCardClick = (index: number) => moves.selectCard(index);
+
 
     function getBikeName(bikeID: string) {
         const players: { [key: string]: Player } = G.players;
@@ -103,21 +108,21 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
 
 
-            <div className="fixed bottom-0 left-0">
+            <div className="fixed bottom-0 left-0 z-20">
                 <div className="relative flex">
-                    <button className="w-20 h-36 border-2 border-gray-400 m-4">
-                        R
+                    <button onClick={() => onRslotClick(BikerType.ROULEUR)} className="w-24 h-36 border-2 border-gray-400 m-4">
+                        R {G.players[playerID].cardR}
                     </button>
-                    <button className="w-20 h-36 border-2 border-gray-400 m-4">
-                        S
+                    <button onClick={() => onSslotClick(BikerType.SPRINTEUR)} className="w-24 h-36 border-2 border-gray-400 m-4">
+                        S {G.players[playerID].cardS}
                     </button>
                 </div>
             </div>
 
-            <div className="fixed bottom-0 w-full">
+            <div className="fixed bottom-0 w-full z-10">
                 <div className="relative flex justify-center gap-2 mb-4">
-                    {G.players[playerID]?.deckR.map((card, index: number) =>
-                        <button key={index} className="block w-20 h-36 bg-gray-400 rounded-lg text-white shadow-xl">
+                    {G.players[playerID]?.hand.map((card, index: number) =>
+                        <button onClick={() => onCardClick(index)} key={index} className="block w-24 h-36 bg-gray-400 rounded-lg text-white shadow-md">
                             <span className="ml-2">{card}</span>
                         </button>
                     )}
