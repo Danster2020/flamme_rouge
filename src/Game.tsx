@@ -75,12 +75,29 @@ export const GameFlammeRouge = {
                     }
                 },
 
+
+            },
+            endIf: ({ ctx }) => (ctx.turn === ctx.numPlayers + 1),
+            next: "energy",
+        },
+        energy: {
+            turn: {
+                activePlayers: { all: Stage.NULL },
+                minMoves: 4,
+                maxMoves: 4,
+            },
+            moves: {
                 drawForBikeR: ({ G, playerID, events }, type: BikerType) => {
 
                     const player = G.players[playerID]
 
                     if (player.hand.length > 0) {
                         console.log("cards already in hand!");
+                        return INVALID_MOVE
+                    }
+
+                    if ((player.cardR !== null && type === BikerType.ROULEUR) || (player.cardS !== null && type === BikerType.SPRINTEUR)) {
+                        console.log("card already chosen for this bike");
                         return INVALID_MOVE
                     }
 
@@ -117,28 +134,22 @@ export const GameFlammeRouge = {
                     }
 
                 },
-            },
-            endIf: ({ ctx }) => (ctx.turn === ctx.numPlayers + 1),
-            next: "energy",
-        },
-        energy: {
-            turn: {
-                activePlayers: { all: Stage.NULL },
-            },
-            moves: {
 
-
-            }
+            },
+            endIf: ({ G, ctx }) => (PlayersHaveSelectedCards(G, ctx)),
+            next: "movement"
         },
         movement: {
+            onBegin: ({ G, ctx }) => {
+
+            },
 
         },
     },
 
     turn: {
         minMoves: 2,
-        maxMoves: 100,
-
+        maxMoves: 2,
     },
 
 
@@ -252,4 +263,19 @@ function moveCardsToDeck(cards: [], deck: []) {
         deck.push(cards.pop())
 
     }
+}
+
+function PlayersHaveSelectedCards(G, ctx): boolean {
+
+
+    for (let i = 0; i < ctx.numPlayers; i++) {
+        const player = G.players[i];
+        if (player.cardR === null) {
+            return false
+        }
+        if (player.cardS === null) {
+            return false
+        }
+    }
+    return true
 }

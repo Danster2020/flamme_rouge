@@ -65,7 +65,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     return (
         <>
 
-            <div className="fixed top-0 w-full">
+            <div className="fixed top-0 w-full z-10">
                 <div className="relative flex justify-center gap-2 mb-4">
                     <div>player: {playerID} Phase: {ctx.phase}</div>
                 </div>
@@ -78,7 +78,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                 {winner}
             </div>
 
-            <TransformWrapper>
+            <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
                     <div className="bg-green-100 w-screen h-screen">
                         <div className="flex m-2">
