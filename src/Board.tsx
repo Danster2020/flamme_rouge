@@ -1,4 +1,5 @@
 import { Player } from "./Game";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
@@ -72,27 +73,35 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                 {winner}
             </div>
 
-            <div className="flex">
-                {G.road.map((roadTile, index: number) =>
+            <TransformWrapper>
+                <TransformComponent>
+                    <div className="bg-green-100 w-screen h-screen">
+                        <div className="flex">
+                            {G.road.map((roadTile, index: number) =>
 
-                    <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10">
-                        <ul className="flex flex-col-reverse">
-                            {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
+                                <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10">
+                                    <ul className="flex flex-col-reverse">
+                                        {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-                                <li key={laneIndex} className="w-20 h-10 border-2 border-green-500 bg-black text-white">
-                                    {roadTile.bikes[laneIndex] ? <span>{getBikeName(roadTile.bikes[laneIndex])}</span> :
-                                        <span>-</span>
+                                            <li key={laneIndex} className="w-20 h-10 border-2 border-green-500 bg-black text-white">
+                                                {roadTile.bikes[laneIndex] ? <span>{getBikeName(roadTile.bikes[laneIndex])}</span> :
+                                                    <span>-</span>
 
-                                    }
-                                </li>
+                                                }
+                                            </li>
+
+                                        )}
+                                    </ul>
+                                </div>
 
                             )}
-                        </ul>
+
+                        </div>
                     </div>
+                </TransformComponent>
+            </TransformWrapper>
 
-                )}
 
-            </div>
 
             <div className="fixed bottom-0 left-0">
                 <div className="relative flex">
