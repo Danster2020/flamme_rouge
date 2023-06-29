@@ -35,9 +35,10 @@ export const GameFlammeRouge = {
     setup: () => ({
         cells: Array(9).fill(null),
         road: road,
+        discardPile: [],
         players: {
-            '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR1, deckS: startDeckS1 } as Player,
-            '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR2, deckS: startDeckS2 } as Player,
+            '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, cardR: null, cardS: null, hand: [], deckR: startDeckR1, deckS: startDeckS1, recyDeckR: [], recyDeckS: [] } as Player,
+            '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, cardR: null, cardS: null, hand: [], deckR: startDeckR2, deckS: startDeckS2, recyDeckR: [], recyDeckS: [] } as Player,
         },
     }),
 
@@ -49,20 +50,27 @@ export const GameFlammeRouge = {
             moves: {
                 selectBikeStart: ({ G, playerID, events }, roadTileIndex) => {
 
+                    const roadTile = G.road[roadTileIndex]
+                    const player = G.players[playerID]
+
                     if (playerID === null) {
                         console.log("spectating player can't place bike!");
                         return INVALID_MOVE;
                     }
 
-                    const roadTile = G.road[roadTileIndex]
-                    const player = G.players[playerID]
-
                     if (roadTile.bikes.length !== roadTile.lanes) {
-                        roadTile.bikes.push(player.bikeR_ID)
+                        if (player.nrOfPlacedBikes === 0) {
+                            roadTile.bikes.push(player.bikeR_ID)
+                            console.log("bike R placed");
+                        } else {
+                            roadTile.bikes.push(player.bikeS_ID)
+                            console.log("bike S placed");
+                        }
+                        player.nrOfPlacedBikes++;
                     }
                 },
             },
-            endIf: ({ ctx }) => (ctx.turn == ctx.numPlayers + 1),
+            endIf: ({ ctx }) => (ctx.turn === ctx.numPlayers + 1),
             next: "energy",
         },
         energy: {
