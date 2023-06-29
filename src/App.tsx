@@ -8,7 +8,8 @@ import Home from './Home';
 const ClientFlammeRouge = Client({
     game: GameFlammeRouge,
     board: BoardFlammeRouge,
-    multiplayer: SocketIO({ server: 'localhost:8000' }),
+    multiplayer: Local(),
+    // multiplayer: SocketIO({ server: 'localhost:8000' }),
 });
 
 const App = () => (

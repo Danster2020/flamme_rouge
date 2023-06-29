@@ -1,6 +1,6 @@
 import { Player } from "./Game";
 
-export function BoardFlammeRouge({ ctx, G, moves, events }) {
+export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
     const onClick = (id) => moves.clickCell(id);
     const onRoadTileClick = (id) => moves.selectBikeStart(id);
@@ -45,11 +45,11 @@ export function BoardFlammeRouge({ ctx, G, moves, events }) {
             const id = 3 * i + j;
             cells.push(
                 <td key={id}>
-                    {G.cells[id] ? (
+                    {G.cells[id] ?
                         <div style={cellStyle}>{G.cells[id]}</div>
-                    ) : (
+                        :
                         <button style={cellStyle} onClick={() => onClick(id)} />
-                    )}
+                    }
                 </td>
             );
         }
@@ -61,7 +61,7 @@ export function BoardFlammeRouge({ ctx, G, moves, events }) {
 
             <div className="fixed top-0 w-full">
                 <div className="relative flex justify-center gap-2 mb-4">
-                    <div>Stage: {ctx.stage}</div>
+                    <div>player: {playerID} Phase: {ctx.phase}</div>
                 </div>
             </div>
 
@@ -75,13 +75,13 @@ export function BoardFlammeRouge({ ctx, G, moves, events }) {
             <div className="flex">
                 {G.road.map((roadTile, index: number) =>
 
-                    <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10 border-2 border-red-500 bg-black text-white">
+                    <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10">
                         <ul className="flex flex-col-reverse">
                             {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
                                 <li key={laneIndex} className="w-20 h-10 border-2 border-green-500 bg-black text-white">
                                     {roadTile.bikes[laneIndex] ? <span>{getBikeName(roadTile.bikes[laneIndex])}</span> :
-                                        <span>LANE {laneIndex}</span>
+                                        <span>-</span>
 
                                     }
                                 </li>
@@ -94,14 +94,24 @@ export function BoardFlammeRouge({ ctx, G, moves, events }) {
 
             </div>
 
+            <div className="fixed bottom-0 left-0">
+                <div className="relative flex">
+                    <button className="w-20 h-36 border-2 border-gray-400 m-4">
+                        R
+                    </button>
+                    <button className="w-20 h-36 border-2 border-gray-400 m-4">
+                        S
+                    </button>
+                </div>
+            </div>
+
             <div className="fixed bottom-0 w-full">
                 <div className="relative flex justify-center gap-2 mb-4">
-                    {G.players[0]?.deckR.map((card, index: number) =>
+                    {G.players[playerID]?.deckR.map((card, index: number) =>
                         <button key={index} className="block w-20 h-36 bg-gray-400 rounded-lg text-white shadow-xl">
                             <span className="ml-2">{card}</span>
                         </button>
                     )}
-                    {/* {G.players[0]?.deckR[0]} */}
                 </div>
             </div>
         </>

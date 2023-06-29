@@ -1,11 +1,14 @@
-import { INVALID_MOVE } from 'boardgame.io/core';
+import { INVALID_MOVE, Stage, TurnOrder } from 'boardgame.io/core';
 import { PlayerView } from 'boardgame.io/core';
 import { v4 as uuid } from 'uuid';
 
 
 // SETUP
-const startDeckR = [1, 2, 3, 4]
-const startDeckS = [1, 2, 3, 4]
+const startDeckR1 = [1, 2, 3, 4]
+const startDeckS1 = [1, 2, 3, 4]
+
+const startDeckR2 = [5, 6, 7, 8]
+const startDeckS2 = [5, 6, 7, 8]
 
 const roadTile1 = {
     lanes: 2,
@@ -33,53 +36,54 @@ export const GameFlammeRouge = {
         cells: Array(9).fill(null),
         road: road,
         players: {
-            '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR, deckS: startDeckS } as Player,
-            '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR, deckS: startDeckS } as Player,
+            '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR1, deckS: startDeckS1 } as Player,
+            '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), hand: [], deckR: startDeckR2, deckS: startDeckS2 } as Player,
         },
     }),
 
-    playerView: PlayerView.STRIP_SECRETS,
+    // playerView: PlayerView.STRIP_SECRETS,
 
+    phases: {
+        gameSetup: {
+            start: true,
+            moves: {
+                selectBikeStart: ({ G, playerID, events }, roadTileIndex) => {
 
+                    if (playerID === null) {
+                        console.log("spectating player can't place bike!");
+                        return INVALID_MOVE;
+                    }
 
-    turn: {
+                    const roadTile = G.road[roadTileIndex]
+                    const player = G.players[playerID]
 
-        minMoves: 2,
-        maxMoves: 2,
-        stages: {
-            gameSetup: {
-                moves: {
-
+                    if (roadTile.bikes.length !== roadTile.lanes) {
+                        roadTile.bikes.push(player.bikeR_ID)
+                    }
                 },
-                start: true,
-                next: 'energy'
             },
-            energy: {
-                moves: {}
+            endIf: ({ ctx }) => (ctx.turn == ctx.numPlayers + 1),
+            next: "energy",
+        },
+        energy: {
+            turn: {
+                activePlayers: { all: Stage.NULL },
             }
         },
+        movement: {
+
+        },
+    },
+
+    turn: {
+        minMoves: 2,
+        maxMoves: 2,
+
     },
 
 
     moves: {
-        selectBikeStart: ({ G, playerID, events }, roadTileIndex) => {
 
-            if (playerID === null) {
-                console.log("spectating player can't place bike!");
-                return
-            }
-
-            const roadTile = G.road[roadTileIndex]
-            const player = G.players[playerID]
-
-            if (roadTile.bikes.length !== roadTile.lanes) {
-                roadTile.bikes.push(player.bikeR_ID)
-            }
-
-            events.setActivePlayers({
-                all: 'energy',
-            });
-        },
 
         clickCell: ({ G, playerID }, id) => {
             if (G.cells[id] !== null) {
@@ -119,3 +123,6 @@ function IsDraw(cells) {
     return cells.filter(c => c === null).length === 0;
 }
 
+// function PlayCard({ events }) {
+//     events.setActivePlayers({ others: 'discard', minMoves: 1, maxMoves: 1 });
+//   }
