@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import { BikerType, Player } from "./Game";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { useEffectListener } from "bgio-effects/dist/react";
+import DiceComponent from "./animation/dice";
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
@@ -10,6 +13,21 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     const onSslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
     const onCardClick = (index: number) => moves.selectCard(index);
 
+    // useEffectListener('roll', (newValue) => {
+    //     animateDie(newValue)
+    //   }, []);
+
+    // useEffect(() => {
+
+    //     if (ctx.phase === "movement") {
+    //         test()
+    //     }
+
+    // }, [ctx])
+
+    // function test() {
+    //     moves.moveAbike();
+    // }
 
     function getBikeName(bikeID: string) {
         const players: { [key: string]: Player } = G.players;
@@ -77,6 +95,10 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                 </table>
                 {winner}
             </div>
+
+            <div className="mb-10"></div>
+
+            <DiceComponent></DiceComponent>
 
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>

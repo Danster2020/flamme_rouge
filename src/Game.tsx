@@ -1,14 +1,17 @@
 import { INVALID_MOVE, Stage, TurnOrder } from 'boardgame.io/core';
 import { PlayerView } from 'boardgame.io/core';
 import { v4 as uuid } from 'uuid';
+import { moveBikes, moveFurthestBike } from './model/Bike';
+import { EffectsPlugin } from 'bgio-effects/plugin';
+// import { moveBikes } from './model/Bike';
 
 
 // SETUP
 const startDeckR1 = [1, 2, 3, 4]
-const startDeckS1 = [11, 12, 13, 14]
+const startDeckS1 = [1, 2, 3, 4]
 
-const startDeckR2 = [5, 6, 7, 8]
-const startDeckS2 = [25, 26, 27, 28]
+const startDeckR2 = [1, 2, 3, 4]
+const startDeckS2 = [1, 2, 3, 4]
 
 const roadTile1 = {
     lanes: 2,
@@ -17,7 +20,7 @@ const roadTile1 = {
 
 let road = []
 
-for (let index = 0; index < 5; index++) {
+for (let index = 0; index < 10; index++) {
     road.push(roadTile1)
 }
 // ------
@@ -36,11 +39,23 @@ export enum BikerType {
     SPRINTEUR,
 }
 
+const configuredEffectsPlugin = EffectsPlugin({
+    effects: {
+        roll: {
+            create: (value) => value,
+        },
+    },
+});
+
 export const GameFlammeRouge = {
+
+    plugins: [configuredEffectsPlugin],
+
     setup: () => ({
         cells: Array(9).fill(null),
         road: road,
         discardPile: [],
+        nrOfMovedBikes: 0,
         players: {
             '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR1, recyDeckR: [], deckS: startDeckS1, recyDeckS: [] } as Player,
             '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR2, recyDeckR: [], deckS: startDeckS2, recyDeckS: [] } as Player,
@@ -53,7 +68,7 @@ export const GameFlammeRouge = {
         gameSetup: {
             start: true,
             moves: {
-                selectBikeStart: ({ G, playerID, events }, roadTileIndex) => {
+                selectBikeStart: ({ G, ctx, playerID, events }, roadTileIndex) => {
 
                     const roadTile = G.road[roadTileIndex]
                     const player = G.players[playerID]
@@ -73,6 +88,7 @@ export const GameFlammeRouge = {
                         }
                         player.nrOfPlacedBikes++;
                     }
+                    // ctx.effects.roll(2);
                 },
 
 
@@ -88,6 +104,7 @@ export const GameFlammeRouge = {
             },
             moves: {
                 drawForBikeR: ({ G, playerID, events }, type: BikerType) => {
+
 
                     const player = G.players[playerID]
 
@@ -140,9 +157,14 @@ export const GameFlammeRouge = {
             next: "movement"
         },
         movement: {
-            onBegin: ({ G, ctx }) => {
-
+            turn: {
+                activePlayers: { all: Stage.NULL },
             },
+            onBegin: ({ G, ctx, events }) => {
+                moveBikes(G, ctx)
+                // events.endPhase()
+            },
+            next: "movement2"
 
         },
     },
@@ -278,4 +300,9 @@ function PlayersHaveSelectedCards(G, ctx): boolean {
         }
     }
     return true
+}
+
+
+export function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

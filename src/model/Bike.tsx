@@ -1,16 +1,16 @@
 import { v4 as uuid } from 'uuid';
-import { BikerType } from '../Game';
+import { BikerType, delay } from '../Game';
 import { getPlayer } from './Player';
-import { getBikePosition, getRoadTile, getRoadTileIndex } from './Road';
+import { getRoadTile, getRoadTileIndex } from './Road';
 
-export function moveBike(G, bikeID) {
+export function moveBike(G, ctx, bikeID) {
     const currentBikePos = getBikePosition(G, bikeID)
     const currentBikeTile = getRoadTile(G, currentBikePos)
 
 
 
-    const player = getPlayer(G, bikeID)
-    const bikeType = getBikeType(G, bikeID)
+    const player = getPlayer(G, ctx, bikeID)
+    const bikeType = getBikeType(G, ctx, bikeID)
     let cardValue = null
 
     if (bikeType === BikerType.ROULEUR) {
@@ -23,16 +23,15 @@ export function moveBike(G, bikeID) {
     const targetBikePos = getRoadTileIndex(G, targetBikeTile)
 
     // if tile is out of bounds
-    if (targetBikeTile === null) {
-        console.log("HANDLE"); //TODO
-        return
-    }
+    targetBikeTile = ifTileNull(G, targetBikeTile)
 
     // if target tile is already full
     if (targetBikeTile.lanes === targetBikeTile.bikes.length) {
         let nrOfblockedSteps = 0
         while (targetBikeTile.lanes === targetBikeTile.bikes.length) {
             targetBikeTile = getRoadTile(G, currentBikePos + cardValue - nrOfblockedSteps)
+
+            targetBikeTile = ifTileNull(G, targetBikeTile)
 
             if (targetBikeTile === currentBikeTile) {
                 console.log("bike blocked and cant move.");
@@ -44,19 +43,23 @@ export function moveBike(G, bikeID) {
     }
 
     placeBikeOnTile(targetBikeTile, bikeID)
-    // removeBikefromTile(currentBikeTile, bikeID)
+    removeBikefromTile(currentBikeTile, bikeID)
 }
 
-export function getBikeType(G, bikeID): BikerType {
+export function getBikeType(G, ctx, bikeID): BikerType {
 
-    G.players.forEach(player => { // TODO forEach does not worrk on obj
-        if (player.bikeR === bikeID) {
+    for (let i = 0; i < ctx.numPlayers; i++) {
+        const player = G.players[i];
+
+        if (player.bikeR_ID === bikeID) {
+            console.log("type: " + BikerType.ROULEUR);
             return BikerType.ROULEUR
         }
-        else if (player.bikeS === bikeID) {
+        else if (player.bikeS_ID === bikeID) {
+            console.log("type: " + BikerType.SPRINTEUR);
             return BikerType.SPRINTEUR
         }
-    });
+    }
     return null
 }
 
@@ -69,8 +72,88 @@ function removeBikefromTile(RoadTile, bikeID: string) {
     if (index !== -1) {
         array.splice(index, 1);
     }
+
+    return array
 }
 
 function placeBikeOnTile(RoadTile, bikeID: string) {
     RoadTile.bikes.push(bikeID)
 }
+
+
+
+export function moveBikes(G, ctx) {
+
+    const road = G.road
+
+    for (let i = road.length - 1; i >= 0; i--) {
+        const roadTile = road[i];
+        const nrOfbikesOnTile = roadTile.bikes.length
+
+        // if a bike is on the roadTile
+        if (nrOfbikesOnTile > 0) {
+            for (let j = 0; j < nrOfbikesOnTile; j++) {
+                moveBike(G, ctx, roadTile.bikes[0])
+                // await delay(1000);
+
+            }
+        }
+
+        console.log("roadTile" + i);
+    }
+}
+
+
+
+export function moveFurthestBike(G, ctx) {
+
+    const road = G.road
+
+    for (let i = road.length - 1; i >= 0; i--) {
+        const roadTile = road[i];
+        const nrOfbikesOnTile = roadTile.bikes.length
+
+        // if a bike is on the roadTile
+        if (nrOfbikesOnTile > 0) {
+            for (let j = 0; j < nrOfbikesOnTile; j++) {
+                moveBike(G, ctx, roadTile.bikes[0])
+                return
+            }
+        }
+
+        console.log("roadTile" + i);
+    }
+}
+
+export function getBikePosition(G, bikeID): number {
+
+    const road = G.road
+
+    let roadIndex = 0
+
+    for (let j = 0; j < road.length; j++) {
+        const roadTile = road[j];
+
+        for (let i = 0; i < roadTile.bikes.length; i++) {
+            const bike = roadTile.bikes[i];
+            if (bike === bikeID) {
+                return roadIndex
+            }
+        }
+
+        roadIndex++
+    }
+
+    return null
+}
+
+// changes the tile if null to be the last tile on road
+function ifTileNull(G, roadTile) {
+    if (roadTile === null) {
+        console.log("bike move is out of bounds");
+        return getRoadTile(G, G.road.length - 1)
+    }
+
+    return roadTile
+}
+

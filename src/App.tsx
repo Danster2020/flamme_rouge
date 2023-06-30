@@ -4,13 +4,19 @@ import { GameFlammeRouge } from './Game';
 import { BoardFlammeRouge } from './Board';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './Home';
+import { EffectsBoardWrapper } from 'bgio-effects/react';
 
+
+const wrappedBoard = EffectsBoardWrapper(BoardFlammeRouge, {
+    updateStateAfterEffects: true,
+});
 const ClientFlammeRouge = Client({
     game: GameFlammeRouge,
-    board: BoardFlammeRouge,
+    board: wrappedBoard,
     multiplayer: Local(),
     // multiplayer: SocketIO({ server: 'localhost:8000' }),
 });
+
 
 const App = () => (
     <BrowserRouter>

@@ -20,19 +20,3 @@ export function getRoadTileIndex(G, roadTile): number {
     }
 }
 
-export function getBikePosition(G, bikeID): number {
-
-    const road = G.road
-
-    let roadIndex = 0
-    road.forEach(roadTile => {
-        roadTile.forEach(bike => {
-            if (bike === bikeID) {
-                return roadIndex
-            }
-        });
-        roadIndex++
-    });
-
-    return null
-}
