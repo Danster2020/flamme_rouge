@@ -3,7 +3,10 @@ import { PlayerView } from 'boardgame.io/core';
 import { v4 as uuid } from 'uuid';
 import { moveBikes, moveFurthestBike } from './model/Bike';
 import { EffectsPlugin } from 'bgio-effects/plugin';
+import { Game } from 'boardgame.io';
+
 // import { moveBikes } from './model/Bike';
+
 
 
 // SETUP
@@ -39,17 +42,20 @@ export enum BikerType {
     SPRINTEUR,
 }
 
-const configuredEffectsPlugin = EffectsPlugin({
+const configuredEffectsPlugin = {
     effects: {
-        roll: {
-            create: (value) => value,
+        bikeMoved: {
+            create: (array) => array,
+            duration: 2,
         },
     },
-});
+};
 
-export const GameFlammeRouge = {
+export const GameFlammeRouge: Game<any, any, any> = {
 
-    plugins: [configuredEffectsPlugin],
+    name: "Flamme_Rouge",
+
+    plugins: [EffectsPlugin(configuredEffectsPlugin)],
 
     setup: () => ({
         cells: Array(9).fill(null),
@@ -68,7 +74,7 @@ export const GameFlammeRouge = {
         gameSetup: {
             start: true,
             moves: {
-                selectBikeStart: ({ G, ctx, playerID, events }, roadTileIndex) => {
+                selectBikeStart: ({ G, ctx, playerID, events, effects }, roadTileIndex) => {
 
                     const roadTile = G.road[roadTileIndex]
                     const player = G.players[playerID]
@@ -88,7 +94,6 @@ export const GameFlammeRouge = {
                         }
                         player.nrOfPlacedBikes++;
                     }
-                    // ctx.effects.roll(2);
                 },
 
 
@@ -160,8 +165,8 @@ export const GameFlammeRouge = {
             turn: {
                 activePlayers: { all: Stage.NULL },
             },
-            onBegin: ({ G, ctx, events }) => {
-                moveBikes(G, ctx)
+            onBegin: ({ G, ctx, effects, events }) => {
+                moveBikes(G, ctx, effects)
                 // events.endPhase()
             },
             next: "movement2"

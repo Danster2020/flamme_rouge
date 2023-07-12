@@ -6,6 +6,7 @@ import { getRoadTile, getRoadTileIndex } from './Road';
 export function moveBike(G, ctx, bikeID) {
     const currentBikePos = getBikePosition(G, bikeID)
     const currentBikeTile = getRoadTile(G, currentBikePos)
+    const currentBikeLane = getBikeLane(G, bikeID)
 
 
 
@@ -20,7 +21,6 @@ export function moveBike(G, ctx, bikeID) {
     }
 
     let targetBikeTile = getRoadTile(G, currentBikePos + cardValue)
-    const targetBikePos = getRoadTileIndex(G, targetBikeTile)
 
     // if tile is out of bounds
     targetBikeTile = ifTileNull(G, targetBikeTile)
@@ -35,7 +35,7 @@ export function moveBike(G, ctx, bikeID) {
 
             if (targetBikeTile === currentBikeTile) {
                 console.log("bike blocked and cant move.");
-                return
+                return null
             }
 
             nrOfblockedSteps++
@@ -44,6 +44,10 @@ export function moveBike(G, ctx, bikeID) {
 
     placeBikeOnTile(targetBikeTile, bikeID)
     removeBikefromTile(currentBikeTile, bikeID)
+    const targetBikeLane = getBikeLane(G, bikeID)
+
+    const targetBikePos = getRoadTileIndex(G, targetBikeTile)
+    return { currentBikePos: currentBikePos, targetBikePos: targetBikePos, currentBikeLane: currentBikeLane, targetBikeLane: targetBikeLane }
 }
 
 export function getBikeType(G, ctx, bikeID): BikerType {
@@ -70,7 +74,8 @@ function removeBikefromTile(RoadTile, bikeID: string) {
 
     const index = array.indexOf(bikeID);
     if (index !== -1) {
-        array.splice(index, 1);
+        // array.splice(index, 1);
+        array[index] = null
     }
 
     return array
@@ -82,7 +87,7 @@ function placeBikeOnTile(RoadTile, bikeID: string) {
 
 
 
-export function moveBikes(G, ctx) {
+export function moveBikes(G, ctx, effects) {
 
     const road = G.road
 
@@ -93,9 +98,12 @@ export function moveBikes(G, ctx) {
         // if a bike is on the roadTile
         if (nrOfbikesOnTile > 0) {
             for (let j = 0; j < nrOfbikesOnTile; j++) {
-                moveBike(G, ctx, roadTile.bikes[0])
-                // await delay(1000);
+                const posFromTo = moveBike(G, ctx, roadTile.bikes[j])
 
+                if (posFromTo !== null) {
+                    effects.bikeMoved(posFromTo)
+
+                }
             }
         }
 
@@ -116,7 +124,7 @@ export function moveFurthestBike(G, ctx) {
         // if a bike is on the roadTile
         if (nrOfbikesOnTile > 0) {
             for (let j = 0; j < nrOfbikesOnTile; j++) {
-                moveBike(G, ctx, roadTile.bikes[0])
+                moveBike(G, ctx, roadTile.bikes[j])
                 return
             }
         }
@@ -142,6 +150,28 @@ export function getBikePosition(G, bikeID): number {
         }
 
         roadIndex++
+    }
+
+    return null
+}
+
+export function getBikeLane(G, bikeID) {
+    const road = G.road
+
+    for (let j = 0; j < road.length; j++) {
+        const roadTile = road[j];
+
+        let laneIndex = 0
+
+        for (let i = 0; i < roadTile.bikes.length; i++) {
+            const bike = roadTile.bikes[i];
+            if (bike === bikeID) {
+                return laneIndex
+            }
+            laneIndex++
+
+        }
+
     }
 
     return null

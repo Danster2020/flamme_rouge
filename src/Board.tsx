@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BikerType, Player } from "./Game";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useEffectListener } from "bgio-effects/dist/react";
@@ -7,27 +7,24 @@ import DiceComponent from "./animation/dice";
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
     const onClick = (id) => moves.clickCell(id);
-
     const onRoadTileClick = (id) => moves.selectBikeStart(id);
     const onRslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
     const onSslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
     const onCardClick = (index: number) => moves.selectCard(index);
 
-    // useEffectListener('roll', (newValue) => {
-    //     animateDie(newValue)
-    //   }, []);
+    const [moveObj, setMoveObj] = useState(null)
 
-    // useEffect(() => {
+    useEffectListener('bikeMoved', (obj) => {
+        setMoveObj(obj)
+    }, []);
 
-    //     if (ctx.phase === "movement") {
-    //         test()
-    //     }
+    useEffectListener('effects:end', () => {
+        setMoveObj(null)
+    }, []);
 
-    // }, [ctx])
-
-    // function test() {
-    //     moves.moveAbike();
-    // }
+    useEffect(() => {
+        console.log("moveObj updated:", moveObj);
+    }, [moveObj]);
 
     function getBikeName(bikeID: string) {
         const players: { [key: string]: Player } = G.players;
@@ -80,6 +77,9 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
         tbody.push(<tr key={i}>{cells}</tr>);
     }
 
+
+
+
     return (
         <>
 
@@ -98,8 +98,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
             <div className="mb-10"></div>
 
-            <DiceComponent></DiceComponent>
-
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
                     <div className="bg-green-100 w-screen h-screen">
@@ -110,12 +108,26 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                     <ul className="flex flex-col-reverse">
                                         {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-                                            <li key={laneIndex} className="w-20 h-10 border-2 border-gray-900 bg-gray-400 text-white">
-                                                {roadTile.bikes[laneIndex] ? <span>{getBikeName(roadTile.bikes[laneIndex])}</span> :
-                                                    <span>-</span>
 
+
+
+                                            <li key={laneIndex} className={`w-20 h-10 border-2 border-gray-900 bg-gray-400 text-white 
+                                            ${moveObj !== null && index === moveObj.currentBikePos && laneIndex === moveObj.currentBikeLane ? (
+                                                    "border-yellow-300 animate-pulse"
+                                                ) : (
+                                                    null
+                                                )}`}>
+                                                {roadTile.bikes[laneIndex] ?
+                                                    <span>{getBikeName(roadTile.bikes[laneIndex])}</span>
+                                                    :
+                                                    <span>-</span>
                                                 }
                                             </li>
+
+
+
+
+
 
                                         )}
                                     </ul>
