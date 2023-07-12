@@ -108,26 +108,24 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                     <ul className="flex flex-col-reverse">
                                         {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-
-
-
                                             <li key={laneIndex} className={`w-20 h-10 border-2 border-gray-900 bg-gray-400 text-white 
-                                            ${moveObj !== null && index === moveObj.currentBikePos && laneIndex === moveObj.currentBikeLane ? (
-                                                    "border-yellow-300 animate-pulse"
+                                                ${moveObj !== null && index === moveObj.currentBikePos && laneIndex === moveObj.currentBikeLane ? (
+                                                    "border-yellow-300"
                                                 ) : (
                                                     null
-                                                )}`}>
+                                                )} 
+                                                ${moveObj !== null && index === moveObj.targetBikePos && laneIndex === moveObj.targetBikeLane ? (
+                                                    " animate_target"
+                                                ) : (
+                                                    null
+                                                )}
+                                                `} >
                                                 {roadTile.bikes[laneIndex] ?
                                                     <span>{getBikeName(roadTile.bikes[laneIndex])}</span>
                                                     :
                                                     <span>-</span>
                                                 }
                                             </li>
-
-
-
-
-
 
                                         )}
                                     </ul>
