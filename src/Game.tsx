@@ -32,8 +32,15 @@ export interface Player {
     name: string;
     bikeR_ID: string;
     bikeS_ID: string;
+    nrOfPlacedBikes: number;
+    selectingR: boolean
+    selectingS: boolean
+    cardR: number
+    cardS: number
     hand: number[]; // Replace 'any' with the appropriate type for the hand
     deckR: any[]; // Replace 'any' with the appropriate type for the deckR
+    recyDeckR: any[];
+    recyDeckS: any[];
     deckS: any[]; // Replace 'any' with the appropriate type for the deckS
 }
 
@@ -143,7 +150,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
                     const removedCard = removeAtIndex(player.hand, index)
 
-                    G.discardPile.push(removedCard)
+                    // G.discardPile.push(removedCard)
 
                     if (player.selectingR) {
                         player.cardR = removedCard
@@ -165,12 +172,50 @@ export const GameFlammeRouge: Game<any, any, any> = {
             turn: {
                 activePlayers: { all: Stage.NULL },
             },
+            moves: {
+                moveTest: ({ G, ctx, effects }) => {
+                    moveFurthestBike(G, ctx, effects)
+                }
+            },
             onBegin: ({ G, ctx, effects, events }) => {
-                moveBikes(G, ctx, effects)
+
+                if (PlayersHaveEmptySelectedCards(G, ctx)) {
+                    events.setPhase("end")
+                }
+
+                // moveBikes(G, ctx, effects)
+                // moveFurthestBike(G, ctx, effects)
                 // events.endPhase()
+                // return
             },
             next: "movement2"
 
+        },
+        movement2: {
+            turn: {
+                activePlayers: { all: Stage.NULL },
+            },
+            onBegin: ({ G, ctx, effects, events }) => {
+
+                if (PlayersHaveEmptySelectedCards(G, ctx)) {
+                    events.setPhase("end")
+                }
+
+                // moveBikes(G, ctx, effects)
+                moveFurthestBike(G, ctx, effects)
+                events.endPhase()
+                return
+            },
+            next: "movement"
+        },
+        end: {
+            turn: {
+                activePlayers: { all: Stage.NULL },
+            },
+            onBegin: ({ G, ctx, effects, events }) => {
+                // moveBikes(G, ctx, effects)
+                // events.endPhase()
+            },
         },
     },
 
@@ -301,6 +346,20 @@ function PlayersHaveSelectedCards(G, ctx): boolean {
             return false
         }
         if (player.cardS === null) {
+            return false
+        }
+    }
+    return true
+}
+
+function PlayersHaveEmptySelectedCards(G, ctx): boolean {
+
+    for (let i = 0; i < ctx.numPlayers; i++) {
+        const player = G.players[i];
+        if (player.cardR !== null) {
+            return false
+        }
+        if (player.cardS !== null) {
             return false
         }
     }

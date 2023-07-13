@@ -1,23 +1,35 @@
 import { v4 as uuid } from 'uuid';
-import { BikerType, delay } from '../Game';
+import { BikerType, Player, delay } from '../Game';
 import { getPlayer } from './Player';
-import { getRoadTile, getRoadTileIndex } from './Road';
+import { getRoadTile, getRoadTileIndex, resetRoadTile } from './Road';
 
 export function moveBike(G, ctx, bikeID) {
     const currentBikePos = getBikePosition(G, bikeID)
     const currentBikeTile = getRoadTile(G, currentBikePos)
     const currentBikeLane = getBikeLane(G, bikeID)
 
-
-
     const player = getPlayer(G, ctx, bikeID)
     const bikeType = getBikeType(G, ctx, bikeID)
     let cardValue = null
 
+
     if (bikeType === BikerType.ROULEUR) {
+
+        if (player.cardR === null) {
+            return null // bike has already been moved
+        }
+
         cardValue = player.cardR
+        discardSelectedCard(G, player, BikerType.ROULEUR)
+
     } else {
+
+        if (player.cardS === null) {
+            return null // bike has already been moved
+        }
+
         cardValue = player.cardS
+        discardSelectedCard(G, player, BikerType.SPRINTEUR)
     }
 
     let targetBikeTile = getRoadTile(G, currentBikePos + cardValue)
@@ -68,9 +80,9 @@ export function getBikeType(G, ctx, bikeID): BikerType {
 }
 
 
-function removeBikefromTile(RoadTile, bikeID: string) {
+function removeBikefromTile(roadTile, bikeID: string) {
 
-    let array = RoadTile.bikes
+    let array = roadTile.bikes
 
     const index = array.indexOf(bikeID);
     if (index !== -1) {
@@ -78,11 +90,28 @@ function removeBikefromTile(RoadTile, bikeID: string) {
         array[index] = null
     }
 
+    // if all elements are null after removal
+    if (array.every(element => element === null)) {
+        resetRoadTile(roadTile)
+    }
+
     return array
 }
 
-function placeBikeOnTile(RoadTile, bikeID: string) {
-    RoadTile.bikes.push(bikeID)
+function discardSelectedCard(G: any, player: Player, bikeType: BikerType) {
+
+    if (bikeType === BikerType.ROULEUR) {
+        G.discardPile.push(player.cardR)
+        player.cardR = null
+
+    } else {
+        G.discardPile.push(player.cardS)
+        player.cardS = null
+    }
+}
+
+function placeBikeOnTile(roadTile, bikeID: string) {
+    roadTile.bikes.push(bikeID)
 }
 
 
@@ -113,7 +142,7 @@ export function moveBikes(G, ctx, effects) {
 
 
 
-export function moveFurthestBike(G, ctx) {
+export function moveFurthestBike(G, ctx, effects) {
 
     const road = G.road
 
@@ -124,8 +153,16 @@ export function moveFurthestBike(G, ctx) {
         // if a bike is on the roadTile
         if (nrOfbikesOnTile > 0) {
             for (let j = 0; j < nrOfbikesOnTile; j++) {
-                moveBike(G, ctx, roadTile.bikes[j])
-                return
+
+                let posFromTo = null
+                if (roadTile.bikes[j] !== null) {
+                    posFromTo = moveBike(G, ctx, roadTile.bikes[j])
+                }
+
+                if (posFromTo !== null) {
+                    effects.bikeMoved(posFromTo)
+                    return
+                }
             }
         }
 

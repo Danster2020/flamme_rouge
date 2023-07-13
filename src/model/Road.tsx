@@ -20,3 +20,7 @@ export function getRoadTileIndex(G, roadTile): number {
     }
 }
 
+export function resetRoadTile(roadTile) {
+    roadTile.bikes = []
+}
+
