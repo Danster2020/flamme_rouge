@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { BikerType, Player } from "./Game";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useEffectListener } from "bgio-effects/dist/react";
+import { StateBar } from "./StateBar";
+
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
@@ -91,11 +93,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     return (
         <>
 
-            <div className="fixed top-0 w-full z-10">
-                <div className="relative flex justify-center gap-2 mb-4">
-                    <div>player: {playerID} Phase: {ctx.phase}</div>
-                </div>
-            </div>
+            <StateBar></StateBar>
 
             <div>
                 <table id="board">

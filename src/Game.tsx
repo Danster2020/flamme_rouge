@@ -1,7 +1,7 @@
 import { INVALID_MOVE, Stage, TurnOrder } from 'boardgame.io/core';
 import { PlayerView } from 'boardgame.io/core';
 import { v4 as uuid } from 'uuid';
-import { moveBikes, moveFurthestBike } from './model/Bike';
+import { moveBikes, moveFurthestBike, runSlipStream } from './model/Bike';
 import { EffectsPlugin } from 'bgio-effects/plugin';
 import { Game } from 'boardgame.io';
 
@@ -52,9 +52,13 @@ export enum BikerType {
 const configuredEffectsPlugin = {
     effects: {
         bikeMoved: {
-            create: (array) => array,
+            create: (obj) => obj,
             duration: 3,
         },
+        exhaustion: {
+            create: (obj) => obj,
+            duration: 2,
+        }
     },
 };
 
@@ -175,7 +179,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
             onBegin: ({ G, ctx, effects, events }) => {
 
                 if (PlayersHaveEmptySelectedCards(G, ctx)) {
-                    events.setPhase("end")
+                    events.setPhase("slipStream")
                 }
 
                 moveFurthestBike(G, ctx, effects)
@@ -184,14 +188,20 @@ export const GameFlammeRouge: Game<any, any, any> = {
             next: "movement"
 
         },
-        end: {
+        slipStream: {
             turn: {
                 activePlayers: { all: Stage.NULL },
             },
             onBegin: ({ G, ctx, effects, events }) => {
-                // moveBikes(G, ctx, effects)
-                // events.endPhase()
+
+                if (!runSlipStream(G, ctx, effects)) {
+                    events.setPhase("exhaustion")
+                }
             },
+            next: "slipStream"
+        },
+        exhaustion: {
+
         },
     },
 

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import { BikerType, Player, delay } from '../Game';
-import { getPlayer } from './Player';
+import { getPlayer, getPlayerID } from './Player';
 import { getRoadTile, getRoadTileIndex, resetRoadTile } from './Road';
 
 export function moveBike(G, ctx, bikeID) {
@@ -60,6 +60,69 @@ export function moveBike(G, ctx, bikeID) {
 
     const targetBikePos = getRoadTileIndex(G, targetBikeTile)
     return { currentBikePos: currentBikePos, targetBikePos: targetBikePos, currentBikeLane: currentBikeLane, targetBikeLane: targetBikeLane }
+}
+
+export function moveBikeIfSlipStream(G, bikeID) {
+    const currentBikePos = getBikePosition(G, bikeID)
+    const currentBikeTile = getRoadTile(G, currentBikePos)
+    const currentBikeLane = getBikeLane(G, bikeID)
+
+    let oneAheadBikeTile = getRoadTile(G, currentBikePos + 1)
+    let twoAheadBikeTile = getRoadTile(G, currentBikePos + 2)
+
+    if (oneAheadBikeTile === null || twoAheadBikeTile === null) {
+        return null
+    }
+
+    // if oneAheadBikeTile contains a bike
+    if (oneAheadBikeTile.bikes.length > 0) {
+        return null
+    }
+
+    // if twoAheadBikeTile tile is empty
+    if (twoAheadBikeTile.bikes.length === 0) {
+        return null
+    }
+
+    placeBikeOnTile(oneAheadBikeTile, bikeID)
+    removeBikefromTile(currentBikeTile, bikeID)
+    const targetBikeLane = getBikeLane(G, bikeID)
+
+    const targetBikePos = getRoadTileIndex(G, oneAheadBikeTile)
+    return { currentBikePos: currentBikePos, targetBikePos: targetBikePos, currentBikeLane: currentBikeLane, targetBikeLane: targetBikeLane }
+}
+
+export function handOutExhaustionCards(G, ctx, effects, bikeID) {
+
+    const road = G.road
+
+    for (let i = road.length - 1; i >= 0; i--) {
+        const roadTile = road[i];
+        const nrOfbikesOnTile = roadTile.bikes.length
+
+        // if a bike is on the roadTile
+        if (nrOfbikesOnTile > 0) {
+            for (let j = 0; j < nrOfbikesOnTile; j++) {
+
+                const currentBikePos = getBikePosition(G, bikeID)
+                const nextBikeTile = getRoadTile(G, currentBikePos + 1)
+                const player = getPlayer(G, ctx, bikeID)
+                const playerID = getPlayerID(G, ctx, bikeID)
+                const bikeType = getBikeType(G, ctx, bikeID)
+
+                if (nextBikeTile !== null && nextBikeTile.bikes.length === 0) {
+
+                    if (bikeType === BikerType.ROULEUR) {
+                        player.deckR.push(2)
+                    } else {
+                        player.deckS.push(2)
+                    }
+
+                    effects.exhaustion({ playerID: playerID, bikeType: bikeType })
+                }
+            }
+        }
+    }
 }
 
 export function getBikeType(G, ctx, bikeID): BikerType {
@@ -165,9 +228,37 @@ export function moveFurthestBike(G, ctx, effects) {
                 }
             }
         }
-
-        console.log("roadTile" + i);
     }
+}
+
+export function runSlipStream(G, ctx, effects) {
+    const road = G.road
+
+    let slipStreamOccured = false
+
+    for (let i = 0; i < road.length; i++) {
+        const roadTile = road[i];
+        const nrOfbikesOnTile = roadTile.bikes.length
+
+        // if a bike is on the roadTile
+        if (nrOfbikesOnTile > 0) {
+            for (let j = 0; j < nrOfbikesOnTile; j++) {
+
+                let posFromTo = null
+                if (roadTile.bikes[j] !== null) {
+                    posFromTo = moveBikeIfSlipStream(G, roadTile.bikes[j])
+                }
+
+                if (posFromTo !== null) {
+                    effects.bikeMoved(posFromTo)
+                    slipStreamOccured = true
+                    return slipStreamOccured
+                }
+            }
+        }
+    }
+
+    return slipStreamOccured
 }
 
 export function getBikePosition(G, bikeID): number {
