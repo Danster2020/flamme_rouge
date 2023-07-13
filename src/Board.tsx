@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { BikerType, Player } from "./Game";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useEffectListener } from "bgio-effects/dist/react";
-import DiceComponent from "./animation/dice";
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
@@ -16,6 +15,15 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
     useEffectListener('bikeMoved', (obj) => {
         setMoveObj(obj)
+
+        // required to delay moves
+        const timer = setTimeout(() => {
+            if (playerID === "0") {
+                events.endPhase()
+            }
+
+        }, 2000);
+        return () => clearTimeout(timer);
     }, []);
 
     useEffectListener('effects:end', () => {

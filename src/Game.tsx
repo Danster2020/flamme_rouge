@@ -172,41 +172,17 @@ export const GameFlammeRouge: Game<any, any, any> = {
             turn: {
                 activePlayers: { all: Stage.NULL },
             },
-            moves: {
-                moveTest: ({ G, ctx, effects }) => {
-                    moveFurthestBike(G, ctx, effects)
-                }
-            },
             onBegin: ({ G, ctx, effects, events }) => {
 
                 if (PlayersHaveEmptySelectedCards(G, ctx)) {
                     events.setPhase("end")
                 }
 
-                // moveBikes(G, ctx, effects)
-                // moveFurthestBike(G, ctx, effects)
-                // events.endPhase()
-                // return
-            },
-            next: "movement2"
-
-        },
-        movement2: {
-            turn: {
-                activePlayers: { all: Stage.NULL },
-            },
-            onBegin: ({ G, ctx, effects, events }) => {
-
-                if (PlayersHaveEmptySelectedCards(G, ctx)) {
-                    events.setPhase("end")
-                }
-
-                // moveBikes(G, ctx, effects)
                 moveFurthestBike(G, ctx, effects)
-                events.endPhase()
-                return
+
             },
             next: "movement"
+
         },
         end: {
             turn: {
