@@ -46,7 +46,7 @@ const configuredEffectsPlugin = {
     effects: {
         bikeMoved: {
             create: (array) => array,
-            duration: 2,
+            duration: 3,
         },
     },
 };
