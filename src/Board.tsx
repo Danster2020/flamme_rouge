@@ -5,6 +5,7 @@ import { useEffectListener } from "bgio-effects/dist/react";
 import { StateBar } from "./StateBar";
 import toast, { Toaster } from "react-hot-toast";
 import Confetti from 'react-confetti'
+import { PlayerList } from "./PlayerList";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -91,11 +92,12 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
             <StateBar></StateBar>
 
+            <PlayerList></PlayerList>
 
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
 
-                    <div className="pt-10 pl-10 bg-green-100 w-screen h-screen">
+                    <div className="pt-20 pl-10 bg-green-100 w-screen h-screen">
                         <div className="flex m-2">
                             {G.road.map((roadTile, index: number) =>
 

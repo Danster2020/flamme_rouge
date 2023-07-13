@@ -117,9 +117,14 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
             },
             turn: {
-                activePlayers: { all: Stage.NULL },
-                minMoves: 4,
-                maxMoves: 4,
+                activePlayers: { all: "selectingCards" },
+
+                stages: {
+                    selectingCards: { next: "selectedCards" },
+                    selectedCards: {},
+                },
+
+
             },
             moves: {
                 drawForBikeR: ({ G, playerID, events }, type: BikerType) => {
@@ -151,7 +156,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
                 },
 
-                selectCard: ({ G, playerID }, index: number) => {
+                selectCard: ({ G, ctx, events, playerID }, index: number) => {
 
                     const player = G.players[playerID]
 
@@ -167,6 +172,10 @@ export const GameFlammeRouge: Game<any, any, any> = {
                         player.cardS = removedCard
                         moveCardsToDeck(player.hand, player.recyDeckS)
                         player.selectingS = false
+                    }
+
+                    if (player.cardR !== null && player.cardS !== null) {
+                        events.setStage("selectedCards")
                     }
 
                 },
