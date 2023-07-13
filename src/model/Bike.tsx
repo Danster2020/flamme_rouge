@@ -46,7 +46,7 @@ export function moveBike(G, ctx, bikeID) {
             targetBikeTile = ifTileNull(G, targetBikeTile)
 
             if (targetBikeTile === currentBikeTile) {
-                console.log("bike blocked and cant move.");
+                console.log("bike blocked and can't move.");
                 return null
             }
 
@@ -92,7 +92,7 @@ export function moveBikeIfSlipStream(G, bikeID) {
     return { currentBikePos: currentBikePos, targetBikePos: targetBikePos, currentBikeLane: currentBikeLane, targetBikeLane: targetBikeLane }
 }
 
-export function handOutExhaustionCards(G, ctx, effects, bikeID) {
+export function handOutExhaustionCards(G, ctx, effects) {
 
     const road = G.road
 
@@ -104,6 +104,7 @@ export function handOutExhaustionCards(G, ctx, effects, bikeID) {
         if (nrOfbikesOnTile > 0) {
             for (let j = 0; j < nrOfbikesOnTile; j++) {
 
+                const bikeID = roadTile.bikes[j]
                 const currentBikePos = getBikePosition(G, bikeID)
                 const nextBikeTile = getRoadTile(G, currentBikePos + 1)
                 const player = getPlayer(G, ctx, bikeID)

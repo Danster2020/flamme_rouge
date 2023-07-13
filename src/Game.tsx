@@ -1,12 +1,9 @@
 import { INVALID_MOVE, Stage, TurnOrder } from 'boardgame.io/core';
 import { PlayerView } from 'boardgame.io/core';
 import { v4 as uuid } from 'uuid';
-import { moveBikes, moveFurthestBike, runSlipStream } from './model/Bike';
+import { handOutExhaustionCards, moveBikes, moveFurthestBike, runSlipStream } from './model/Bike';
 import { EffectsPlugin } from 'bgio-effects/plugin';
 import { Game } from 'boardgame.io';
-
-// import { moveBikes } from './model/Bike';
-
 
 
 // SETUP
@@ -69,7 +66,6 @@ export const GameFlammeRouge: Game<any, any, any> = {
     plugins: [EffectsPlugin(configuredEffectsPlugin)],
 
     setup: () => ({
-        cells: Array(9).fill(null),
         road: road,
         discardPile: [],
         nrOfMovedBikes: 0,
@@ -113,6 +109,13 @@ export const GameFlammeRouge: Game<any, any, any> = {
             next: "energy",
         },
         energy: {
+            onBegin: ({ G, ctx, effects, events }) => {
+
+                if (G.road[road.length - 1].bikes.length > 0) {
+                    events.endGame();
+                }
+
+            },
             turn: {
                 activePlayers: { all: Stage.NULL },
                 minMoves: 4,
@@ -201,7 +204,15 @@ export const GameFlammeRouge: Game<any, any, any> = {
             next: "slipStream"
         },
         exhaustion: {
+            turn: {
+                activePlayers: { all: Stage.NULL },
+            },
+            onBegin: ({ G, ctx, effects, events }) => {
 
+                handOutExhaustionCards(G, ctx, effects)
+                events.endPhase()
+            },
+            next: "energy"
         },
     },
 
@@ -210,53 +221,12 @@ export const GameFlammeRouge: Game<any, any, any> = {
         maxMoves: 2,
     },
 
-
     moves: {
 
 
-        clickCell: ({ G, playerID }, id) => {
-            if (G.cells[id] !== null) {
-                return INVALID_MOVE;
-            }
-            G.cells[id] = playerID;
-        },
-
-
-    },
-
-    endIf: ({ G, ctx }) => {
-        if (IsVictory(G.cells)) {
-            return { winner: ctx.currentPlayer };
-        }
-        if (IsDraw(G.cells)) {
-            return { draw: true };
-        }
     },
 };
 
-// Return true if `cells` is in a winning configuration.
-function IsVictory(cells) {
-    const positions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
-        [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
-    ];
-
-    const isRowComplete = row => {
-        const symbols = row.map(i => cells[i]);
-        return symbols.every(i => i !== null && i === symbols[0]);
-    };
-
-    return positions.map(isRowComplete).some(i => i === true);
-}
-
-// Return true if all `cells` are occupied.
-function IsDraw(cells) {
-    return cells.filter(c => c === null).length === 0;
-}
-
-// function PlayCard({ events }) {
-//     events.setActivePlayers({ others: 'discard', minMoves: 1, maxMoves: 1 });
-//   }
 
 // draws one card
 function drawCard(G: any, playerID, type: BikerType) {

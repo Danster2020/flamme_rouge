@@ -3,11 +3,12 @@ import { BikerType, Player } from "./Game";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { useEffectListener } from "bgio-effects/dist/react";
 import { StateBar } from "./StateBar";
+import toast, { Toaster } from "react-hot-toast";
+import Confetti from 'react-confetti'
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
-    const onClick = (id) => moves.clickCell(id);
     const onRoadTileClick = (id) => moves.selectBikeStart(id);
     const onRslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
     const onSslotClick = (BikerType: BikerType) => moves.drawForBikeR(BikerType);
@@ -27,6 +28,22 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
         }, 2000);
         return () => clearTimeout(timer);
     }, []);
+
+    useEffectListener('exhaustion', (obj) => {
+
+        let bikeTypeString = ""
+        if (obj.bikeType === BikerType.ROULEUR) {
+            bikeTypeString = "Rouleur"
+        } else {
+            bikeTypeString = "Sprinteur"
+        }
+
+        toast("Spelare" + (obj.playerID + 1) + " " + bikeTypeString + " utmattas.", {
+            icon: '😥',
+        });
+
+    }, []);
+
 
     useEffectListener('effects:end', () => {
         setMoveObj(null)
@@ -62,51 +79,23 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
             );
     }
 
-    const cellStyle = {
-        border: '1px solid #555',
-        width: '50px',
-        height: '50px',
-        lineHeight: '50px',
-    };
-
-    let tbody = [];
-    for (let i = 0; i < 3; i++) {
-        let cells = [];
-        for (let j = 0; j < 3; j++) {
-            const id = 3 * i + j;
-            cells.push(
-                <td key={id}>
-                    {G.cells[id] ?
-                        <div style={cellStyle}>{G.cells[id]}</div>
-                        :
-                        <button style={cellStyle} onClick={() => onClick(id)} />
-                    }
-                </td>
-            );
-        }
-        tbody.push(<tr key={i}>{cells}</tr>);
-    }
 
 
 
 
     return (
         <>
+            {ctx.gameover ? <Confetti /> : null}
+
+            <Toaster position="bottom-center" />
 
             <StateBar></StateBar>
 
-            <div>
-                <table id="board">
-                    <tbody>{tbody}</tbody>
-                </table>
-                {winner}
-            </div>
-
-            <div className="mb-10"></div>
 
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
-                    <div className="bg-green-100 w-screen h-screen">
+
+                    <div className="pt-10 pl-10 bg-green-100 w-screen h-screen">
                         <div className="flex m-2">
                             {G.road.map((roadTile, index: number) =>
 

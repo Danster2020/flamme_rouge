@@ -18,7 +18,7 @@ export function getPlayerID(G, ctx, bikeID: string) {
     for (let i = 0; i < ctx.numPlayers; i++) {
         const player = G.players[i];
         if (player.bikeR_ID === bikeID || player.bikeS_ID === bikeID) {
-            return i.toString()
+            return i
         }
     }
     return null
