@@ -3,11 +3,10 @@ import { useLatestPropsOnEffect } from 'bgio-effects/react';
 export const PlayerList = () => {
     const { G, ctx, playerID } = useLatestPropsOnEffect('bikeMoved');
 
+    const doneConditions = ["selectedCards", "hasPlacedBikes"]
+
     return (
         <>
-
-
-
             <div className='fixed top-0 left-0 z-10'>
                 <ul className='relative flex flex-col m-2'>
                     {[...Array(ctx.numPlayers)].map((test, index: number) =>
@@ -16,7 +15,7 @@ export const PlayerList = () => {
                                 <span className='block w-4 h-4  bg-green-400 rounded-full'></span>
                                 <span className='ml-2'>Player {index}</span>
 
-                                {ctx.activePlayers[index] === "selectedCards" ?
+                                {ctx.activePlayers !== null && doneConditions.includes(ctx.activePlayers[index]) ?
                                     <span className='ml-2 py-1 w-7 bg-green-500 text-white text-center rounded-r-md'>✓</span>
                                     :
                                     <span className='ml-2 py-1 w-7 bg-slate-500 text-white text-center rounded-r-md'>-</span>
@@ -28,13 +27,6 @@ export const PlayerList = () => {
                     )}
                 </ul>
             </div>
-
-
-
-
-
-
-
         </>
     )
 }

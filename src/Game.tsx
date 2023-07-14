@@ -78,36 +78,52 @@ export const GameFlammeRouge: Game<any, any, any> = {
     // playerView: PlayerView.STRIP_SECRETS,
 
     phases: {
+
         gameSetup: {
             start: true,
-            moves: {
-                selectBikeStart: ({ G, ctx, playerID, events, effects }, roadTileIndex) => {
+            turn: {
+                activePlayers: { all: "placingBikes" },
 
-                    const roadTile = G.road[roadTileIndex]
-                    const player = G.players[playerID]
+                stages: {
+                    placingBikes: {
+                        moves: {
+                            selectBikeStart: ({ G, ctx, playerID, events, effects }, roadTileIndex) => {
 
-                    if (playerID === null) {
-                        console.log("spectating player can't place bike!");
-                        return INVALID_MOVE;
-                    }
+                                const roadTile = G.road[roadTileIndex]
+                                const player = G.players[playerID]
 
-                    if (roadTile.bikes.length !== roadTile.lanes) {
-                        if (player.nrOfPlacedBikes === 0) {
-                            roadTile.bikes.push(player.bikeR_ID)
-                            console.log("bike R placed");
-                        } else {
-                            roadTile.bikes.push(player.bikeS_ID)
-                            console.log("bike S placed");
-                        }
-                        player.nrOfPlacedBikes++;
-                    }
+                                if (playerID === null) {
+                                    console.log("spectating player can't place bike!");
+                                    return INVALID_MOVE;
+                                }
+
+                                if (roadTile.bikes.length !== roadTile.lanes) {
+                                    if (player.nrOfPlacedBikes === 0) {
+                                        roadTile.bikes.push(player.bikeR_ID)
+                                        console.log("bike R placed");
+                                    } else {
+                                        roadTile.bikes.push(player.bikeS_ID)
+                                        console.log("bike S placed");
+                                    }
+                                    player.nrOfPlacedBikes++;
+                                }
+
+                                if (player.nrOfPlacedBikes === 2) {
+                                    events.setStage("hasPlacedBikes")
+                                }
+                            },
+                        },
+
+                        next: "hasPlacedBikes"
+                    },
+                    hasPlacedBikes: {},
                 },
-
-
             },
-            endIf: ({ ctx }) => (ctx.turn === ctx.numPlayers + 1),
+
+            endIf: ({ G, ctx }) => (allBikesPlaced(G, ctx)),
             next: "energy",
         },
+
         energy: {
             onBegin: ({ G, ctx, effects, events }) => {
 
@@ -184,6 +200,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
             endIf: ({ G, ctx }) => (PlayersHaveSelectedCards(G, ctx)),
             next: "movement"
         },
+
         movement: {
             turn: {
                 activePlayers: { all: Stage.NULL },
@@ -200,6 +217,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
             next: "movement"
 
         },
+
         slipStream: {
             turn: {
                 activePlayers: { all: Stage.NULL },
@@ -212,6 +230,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
             },
             next: "slipStream"
         },
+
         exhaustion: {
             turn: {
                 activePlayers: { all: Stage.NULL },
@@ -334,4 +353,20 @@ function PlayersHaveEmptySelectedCards(G, ctx): boolean {
 
 export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function allBikesPlaced(G, ctx) {
+
+    if (ctx.activePlayers === null) {
+        return false
+    }
+
+    for (let i = 0; i < ctx.numPlayers; i++) {
+        const playerStage = ctx.activePlayers[i];
+
+        if (playerStage !== "hasPlacedBikes") {
+            return false
+        }
+    }
+    return true
 }

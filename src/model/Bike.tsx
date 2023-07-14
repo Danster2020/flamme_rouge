@@ -62,7 +62,7 @@ export function moveBike(G, ctx, bikeID) {
     return { currentBikePos: currentBikePos, targetBikePos: targetBikePos, currentBikeLane: currentBikeLane, targetBikeLane: targetBikeLane }
 }
 
-export function moveBikeIfSlipStream(G, bikeID) {
+export function moveBikeIfSlipStream(G, bikeID, isNeighbour: boolean) {
     const currentBikePos = getBikePosition(G, bikeID)
     const currentBikeTile = getRoadTile(G, currentBikePos)
     const currentBikeLane = getBikeLane(G, bikeID)
@@ -75,7 +75,7 @@ export function moveBikeIfSlipStream(G, bikeID) {
     }
 
     // if oneAheadBikeTile contains a bike
-    if (oneAheadBikeTile.bikes.length > 0) {
+    if (oneAheadBikeTile.bikes.length > 0 && !isNeighbour) {
         return null
     }
 
@@ -132,11 +132,9 @@ export function getBikeType(G, ctx, bikeID): BikerType {
         const player = G.players[i];
 
         if (player.bikeR_ID === bikeID) {
-            console.log("type: " + BikerType.ROULEUR);
             return BikerType.ROULEUR
         }
         else if (player.bikeS_ID === bikeID) {
-            console.log("type: " + BikerType.SPRINTEUR);
             return BikerType.SPRINTEUR
         }
     }
@@ -247,7 +245,16 @@ export function runSlipStream(G, ctx, effects) {
 
                 let posFromTo = null
                 if (roadTile.bikes[j] !== null) {
-                    posFromTo = moveBikeIfSlipStream(G, roadTile.bikes[j])
+
+                    let bikeIsNeighbour = false
+
+                    // prevents bike from not moving with the bike/bikes
+                    // on the same tile.
+                    if (j > 0) {
+                        bikeIsNeighbour = true
+                    }
+
+                    posFromTo = moveBikeIfSlipStream(G, roadTile.bikes[j], bikeIsNeighbour)
                 }
 
                 if (posFromTo !== null) {
