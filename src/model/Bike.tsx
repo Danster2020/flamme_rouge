@@ -250,7 +250,7 @@ export function runSlipStream(G, ctx, effects) {
 
                     // prevents bike from not moving with the bike/bikes
                     // on the same tile.
-                    if (j > 0) {
+                    if (j > 0 && roadTile.bikes[j - 1] === null) {
                         bikeIsNeighbour = true
                     }
 

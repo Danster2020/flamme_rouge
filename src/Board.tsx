@@ -70,20 +70,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     }
 
 
-    let winner;
-    if (ctx.gameover) {
-        winner =
-            ctx.gameover.winner !== undefined ? (
-                <div id="winner">Winner: {ctx.gameover.winner}</div>
-            ) : (
-                <div id="winner">Draw!</div>
-            );
-    }
-
-
-
-
-
     return (
         <>
             {ctx.gameover ? <Confetti /> : null}
