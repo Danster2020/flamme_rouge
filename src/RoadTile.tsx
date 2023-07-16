@@ -1,4 +1,7 @@
 import { useLatestPropsOnEffect } from 'bgio-effects/react';
+import { BikeSprite } from './BikeSprite';
+
+
 
 export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeName }) => {
 
@@ -23,7 +26,7 @@ export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeNa
     }
 
     return (
-        <li key={props.laneIndex} className={`w-20 h-10 border-2 bg-gray-400 text-white 
+        <li key={props.laneIndex} className={`w-20 h-10 border-2 bg-gray-400 text-white
         ${props.moveObj !== null && props.index === props.moveObj.currentBikePos && props.laneIndex === props.moveObj.currentBikeLane ? (
                 displayEffect()
             ) : (
@@ -36,9 +39,9 @@ export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeNa
             )}
         `} >
             {props.roadTile.bikes[props.laneIndex] ?
-                <span>{props.getBikeName(props.roadTile.bikes[props.laneIndex])}</span>
+                <BikeSprite G={G} ctx={ctx} bike_ID={props.roadTile.bikes[props.laneIndex]}></BikeSprite>
                 :
-                <span>-</span>
+                ""
             }
         </li>
     )
