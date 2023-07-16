@@ -11,6 +11,7 @@ import { RoadTile } from "./RoadTile";
 import roadImg from "./assets/img/road.jpg"
 import backgroundImg from "./assets/img/grass.jpg"
 import CardDecks from "./CardDecks";
+import { Hand } from "./Hand";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -90,7 +91,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
 
-                    <CardDecks G={G} onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
 
                     <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})` }}>
                         <div className="flex m-2">
@@ -113,17 +113,9 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                 </TransformComponent>
             </TransformWrapper>
 
+            <CardDecks G={G} onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
 
-
-            <div className="fixed bottom-0 w-full z-10">
-                <div className="relative flex justify-center gap-2 mb-4">
-                    {G.players[playerID]?.hand.map((card, index: number) =>
-                        <button onClick={() => onCardClick(index)} key={index} className="block w-24 h-36 bg-gray-400 rounded-lg text-white shadow-md">
-                            <span className="ml-2">{card}</span>
-                        </button>
-                    )}
-                </div>
-            </div>
+            <Hand G={G} playerID={playerID} onCardClick={onCardClick}></Hand>
         </>
     );
 }
