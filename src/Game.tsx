@@ -18,7 +18,7 @@ const roadTile1 = {
 
 let road = []
 
-for (let index = 0; index < 10; index++) {
+for (let index = 0; index < 15; index++) {
     road.push(roadTile1)
 }
 // ------

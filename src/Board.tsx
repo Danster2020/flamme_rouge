@@ -8,6 +8,10 @@ import Confetti from 'react-confetti'
 import { PlayerList } from "./PlayerList";
 import { RoadTile } from "./RoadTile";
 
+import roadImg from "./assets/img/road.jpg"
+import backgroundImg from "./assets/img/grass.jpg"
+import CardDecks from "./CardDecks";
+
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
@@ -72,10 +76,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
         return null;
     }
 
-    // const pullPhase = (phase: string) => {
-    //     console.log("currPhase " + phase);
-    //     setTestPhase(phase)
-    // }
 
     return (
         <>
@@ -90,18 +90,17 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
 
-                    <div className="pt-20 pl-10 bg-green-100 w-screen h-screen">
+                    <CardDecks G={G} onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
+
+                    <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})` }}>
                         <div className="flex m-2">
                             {G.road.map((roadTile, index: number) =>
 
-                                <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10">
-                                    <ul className="flex flex-col-reverse">
+                                <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10" >
+                                    <ul className="flex flex-col-reverse" style={{ backgroundImage: `url(${roadImg})`, backgroundPosition: 'center', backgroundSize: "200%" }}>
                                         {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-
                                             <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>
-
-
 
                                         )}
                                     </ul>
@@ -115,17 +114,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
             </TransformWrapper>
 
 
-
-            <div className="fixed bottom-0 left-0 z-20">
-                <div className="relative flex">
-                    <button onClick={() => onRslotClick(BikerType.ROULEUR)} className="w-24 h-36 border-2 border-gray-400 m-4">
-                        R {G.players[playerID].cardR}
-                    </button>
-                    <button onClick={() => onSslotClick(BikerType.SPRINTEUR)} className="w-24 h-36 border-2 border-gray-400 m-4">
-                        S {G.players[playerID].cardS}
-                    </button>
-                </div>
-            </div>
 
             <div className="fixed bottom-0 w-full z-10">
                 <div className="relative flex justify-center gap-2 mb-4">

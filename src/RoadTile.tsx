@@ -10,10 +10,10 @@ export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeNa
     function displayEffect() {
 
         if (ctx.phase === "slipStream") {
-            return "border-blue-600"
+            return "bg-blue-600"
         }
 
-        return "border-yellow-300"
+        return "bg-yellow-300"
     }
 
     function displayAnimation() {
@@ -26,7 +26,7 @@ export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeNa
     }
 
     return (
-        <li key={props.laneIndex} className={`w-20 h-10 border-2 bg-gray-400 text-white
+        <li key={props.laneIndex} className={`flex w-20 h-10 border-r-2 border-r-white border-b-2 border-b-gray-400 text-white
         ${props.moveObj !== null && props.index === props.moveObj.currentBikePos && props.laneIndex === props.moveObj.currentBikeLane ? (
                 displayEffect()
             ) : (

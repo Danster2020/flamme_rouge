@@ -8,9 +8,9 @@ export const PlayerList = () => {
     function playerColor(index) {
         switch (index) {
             case 0:
-                return "bg-red-700"
+                return "bg-red-800"
             case 1:
-                return "bg-blue-700"
+                return "bg-blue-800"
             default:
                 return "bg-gray-400"
         }
