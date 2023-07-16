@@ -2,21 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-.animate_current {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+.animate_movement {
+  animation: pulse1 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 0s;
 }
 
-.animate_target {
-    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    animation-delay: 0s;
+.animate_slip_stream {
+  animation: pulse2 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 0s;
 }
 
-@keyframes pulse {
+@keyframes pulse1 {
     0%, 100% {
       opacity: 1;
     }
     50% {
       opacity: .5;
       @apply border-yellow-300;
+    }
+  }
+
+  @keyframes pulse2 {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+      @apply border-blue-500;
     }
   }

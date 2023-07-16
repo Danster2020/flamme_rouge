@@ -1,7 +1,9 @@
-import { useLatestPropsOnEffect } from 'bgio-effects/react';
+import { useEffectListener, useLatestPropsOnEffect } from 'bgio-effects/react';
+import { useEffect, useState } from 'react';
 
 export const StateBar = () => {
-    const { G, ctx, playerID } = useLatestPropsOnEffect('bikeMoved');
+    const { G, ctx, playerID } = useLatestPropsOnEffect("bikeMoved", "exhaustion");
+
     return (
         <div className="fixed top-0 w-full z-10">
             <div className="relative flex justify-center gap-2 mb-4 ">

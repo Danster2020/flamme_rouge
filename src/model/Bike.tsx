@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { BikerType, Player, delay } from '../Game';
+import { BikerType, Player } from '../Game';
 import { getPlayer, getPlayerID } from './Player';
 import { getRoadTile, getRoadTileIndex, resetRoadTile } from './Road';
 

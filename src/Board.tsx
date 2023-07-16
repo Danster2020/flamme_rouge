@@ -6,6 +6,7 @@ import { StateBar } from "./StateBar";
 import toast, { Toaster } from "react-hot-toast";
 import Confetti from 'react-confetti'
 import { PlayerList } from "./PlayerList";
+import { RoadTile } from "./RoadTile";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -16,6 +17,8 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     const onCardClick = (index: number) => moves.selectCard(index);
 
     const [moveObj, setMoveObj] = useState(null)
+
+    const [testPhase, setTestPhase] = useState("")
 
     useEffectListener('bikeMoved', (obj) => {
         setMoveObj(obj)
@@ -69,6 +72,10 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
         return null;
     }
 
+    // const pullPhase = (phase: string) => {
+    //     console.log("currPhase " + phase);
+    //     setTestPhase(phase)
+    // }
 
     return (
         <>
@@ -91,24 +98,10 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                     <ul className="flex flex-col-reverse">
                                         {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-                                            <li key={laneIndex} className={`w-20 h-10 border-2 border-gray-900 bg-gray-400 text-white 
-                                                ${moveObj !== null && index === moveObj.currentBikePos && laneIndex === moveObj.currentBikeLane ? (
-                                                    "border-yellow-300"
-                                                ) : (
-                                                    null
-                                                )} 
-                                                ${moveObj !== null && index === moveObj.targetBikePos && laneIndex === moveObj.targetBikeLane ? (
-                                                    " animate_target"
-                                                ) : (
-                                                    null
-                                                )}
-                                                `} >
-                                                {roadTile.bikes[laneIndex] ?
-                                                    <span>{getBikeName(roadTile.bikes[laneIndex])}</span>
-                                                    :
-                                                    <span>-</span>
-                                                }
-                                            </li>
+
+                                            <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>
+
+
 
                                         )}
                                     </ul>

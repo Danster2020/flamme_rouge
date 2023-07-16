@@ -1,10 +1,8 @@
-import { INVALID_MOVE, Stage, TurnOrder } from 'boardgame.io/core';
-import { PlayerView } from 'boardgame.io/core';
+import { INVALID_MOVE, Stage } from 'boardgame.io/core';
 import { v4 as uuid } from 'uuid';
-import { handOutExhaustionCards, moveBikes, moveFurthestBike, runSlipStream } from './model/Bike';
+import { handOutExhaustionCards, moveFurthestBike, runSlipStream } from './model/Bike';
 import { EffectsPlugin } from 'bgio-effects/plugin';
 import { Game } from 'boardgame.io';
-
 
 // SETUP
 const startDeckR1 = [1, 2, 3, 4]
@@ -52,10 +50,14 @@ const configuredEffectsPlugin = {
             create: (obj) => obj,
             duration: 3,
         },
+        refresh: {
+            create: null,
+            duration: 0.1,
+        },
         exhaustion: {
             create: (obj) => obj,
             duration: 2,
-        }
+        },
     },
 };
 
@@ -162,7 +164,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
                         drawCard(G, playerID, type)
                     }
 
-                    if (type == BikerType.ROULEUR) {
+                    if (type === BikerType.ROULEUR) {
                         player.selectingR = true
                         player.selectingS = false
                     } else {
@@ -224,6 +226,8 @@ export const GameFlammeRouge: Game<any, any, any> = {
             },
             onBegin: ({ G, ctx, effects, events }) => {
 
+                effects.refresh()
+
                 if (!runSlipStream(G, ctx, effects)) {
                     events.setPhase("exhaustion")
                 }
@@ -236,6 +240,8 @@ export const GameFlammeRouge: Game<any, any, any> = {
                 activePlayers: { all: Stage.NULL },
             },
             onBegin: ({ G, ctx, effects, events }) => {
+
+                effects.refresh()
 
                 handOutExhaustionCards(G, ctx, effects)
                 events.endPhase()
@@ -348,11 +354,6 @@ function PlayersHaveEmptySelectedCards(G, ctx): boolean {
         }
     }
     return true
-}
-
-
-export function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function allBikesPlaced(G, ctx) {
