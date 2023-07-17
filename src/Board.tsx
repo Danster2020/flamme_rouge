@@ -8,10 +8,10 @@ import Confetti from 'react-confetti'
 import { PlayerList } from "./PlayerList";
 import { RoadTile } from "./RoadTile";
 
-import roadImg from "./assets/img/road.jpg"
 import backgroundImg from "./assets/img/grass.jpg"
 import CardDecks from "./CardDecks";
 import { Hand } from "./Hand";
+import { getRoadTile, tileHasProperty } from "./model/Road";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -22,8 +22,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     const onCardClick = (index: number) => moves.selectCard(index);
 
     const [moveObj, setMoveObj] = useState(null)
-
-    const [testPhase, setTestPhase] = useState("")
 
     useEffectListener('bikeMoved', (obj) => {
         setMoveObj(obj)
@@ -77,7 +75,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
         return null;
     }
 
-
     return (
         <>
             {ctx.gameover ? <Confetti /> : null}
@@ -93,18 +90,28 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
 
                     <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})` }}>
-                        <div className="flex m-2">
+                        <div className="flex mt-2">
                             {G.road.map((roadTile, index: number) =>
 
-                                <div onClick={() => onRoadTileClick(index)} key={index} className="w-20 h-10" >
-                                    <ul className="flex flex-col-reverse" style={{ backgroundImage: `url(${roadImg})`, backgroundPosition: 'center', backgroundSize: "200%" }}>
-                                        {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
+                                <>
+                                    <div onClick={() => onRoadTileClick(index)} key={index} className="" >
+                                        <ul className="flex flex-col-reverse">
+                                            {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-                                            <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>
+                                                <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>,
 
-                                        )}
-                                    </ul>
-                                </div>
+                                            )}
+                                        </ul>
+                                    </div>
+                                    {tileHasProperty(roadTile, "start") && !tileHasProperty(getRoadTile(G, index + 1), "start") ?
+                                        <div className="bg-white flex flex-col justify-center rounded-lg">
+                                            <div className="rotate-90 text-center text-lg font-semibold tracking-wide w-full">Start</div>
+                                        </div>
+                                        :
+                                        null
+                                    }
+
+                                </>
 
                             )}
 

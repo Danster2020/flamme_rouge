@@ -1,7 +1,8 @@
 import { useLatestPropsOnEffect } from 'bgio-effects/react';
 import { BikeSprite } from './BikeSprite';
 
-
+import roadImg from "./assets/img/asphalt.jpg"
+import { getRoadTile, tileHasProperty } from './model/Road';
 
 export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeName }) => {
 
@@ -25,24 +26,29 @@ export const RoadTile = (props: { laneIndex, index, moveObj, roadTile, getBikeNa
         return "animate_movement"
     }
 
+
+
     return (
-        <li key={props.laneIndex} className={`flex w-20 h-10 border-r-2 border-r-white border-b-2 border-b-gray-400 text-white
+        <>
+            <li key={props.laneIndex} style={{ backgroundImage: `url(${roadImg})`, backgroundPosition: 'center', backgroundSize: "170%" }}
+                className={`flex w-20 h-10 border-r-2 border-r-white border-b-2 border-b-gray-400 text-white
         ${props.moveObj !== null && props.index === props.moveObj.currentBikePos && props.laneIndex === props.moveObj.currentBikeLane ? (
-                displayEffect()
-            ) : (
-                "border-gray-900"
-            )} 
+                        displayEffect()
+                    ) : (
+                        "border-gray-900"
+                    )} 
         ${props.moveObj !== null && props.index === props.moveObj.targetBikePos && props.laneIndex === props.moveObj.targetBikeLane ? (
-                displayAnimation()
-            ) : (
-                ""
-            )}
+                        displayAnimation()
+                    ) : (
+                        ""
+                    )}
         `} >
-            {props.roadTile.bikes[props.laneIndex] ?
-                <BikeSprite G={G} ctx={ctx} bike_ID={props.roadTile.bikes[props.laneIndex]}></BikeSprite>
-                :
-                ""
-            }
-        </li>
+                {props.roadTile.bikes[props.laneIndex] ?
+                    <BikeSprite G={G} ctx={ctx} bike_ID={props.roadTile.bikes[props.laneIndex]}></BikeSprite>
+                    :
+                    ""
+                }
+            </li>
+        </>
     )
 }

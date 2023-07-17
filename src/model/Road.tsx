@@ -1,3 +1,4 @@
+import { RoadTile } from "../Game";
 
 export function getRoadTile(G, index) {
 
@@ -22,5 +23,9 @@ export function getRoadTileIndex(G, roadTile): number {
 
 export function resetRoadTile(roadTile) {
     roadTile.bikes = []
+}
+
+export function tileHasProperty(roadTile: RoadTile, property: string) {
+    return roadTile.properties.includes(property)
 }
 

@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { handOutExhaustionCards, moveFurthestBike, runSlipStream } from './model/Bike';
 import { EffectsPlugin } from 'bgio-effects/plugin';
 import { Game } from 'boardgame.io';
+import { tileHasProperty } from './model/Road';
 
 // SETUP
 const startDeckR1 = [1, 2, 3, 4]
@@ -11,15 +12,33 @@ const startDeckS1 = [1, 2, 3, 4]
 const startDeckR2 = [1, 2, 3, 4]
 const startDeckS2 = [1, 2, 3, 4]
 
+export interface RoadTile {
+    lanes: 2,
+    bikes: [],
+    properties: string[]
+}
+
 const roadTile1 = {
     lanes: 2,
-    bikes: []
+    bikes: [],
+    properties: []
+}
+
+const roadTile2 = {
+    lanes: 2,
+    bikes: [],
+    properties: ["start"]
 }
 
 let road = []
 
 for (let index = 0; index < 15; index++) {
-    road.push(roadTile1)
+
+    if (index < 5) {
+        road.push(roadTile2 as RoadTile)
+    } else {
+        road.push(roadTile1 as RoadTile)
+    }
 }
 // ------
 
@@ -96,6 +115,11 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
                                 if (playerID === null) {
                                     console.log("spectating player can't place bike!");
+                                    return INVALID_MOVE;
+                                }
+
+                                if (!tileHasProperty(roadTile, "start")) {
+                                    console.log("can't place bike outside start area!");
                                     return INVALID_MOVE;
                                 }
 
