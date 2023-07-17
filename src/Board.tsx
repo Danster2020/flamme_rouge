@@ -94,6 +94,13 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                             {G.road.map((roadTile, index: number) =>
 
                                 <>
+                                    {tileHasProperty(roadTile, "goal") && !tileHasProperty(getRoadTile(G, index - 1), "goal") ?
+                                        <div className="bg-white flex flex-col justify-center rounded-lg">
+                                            <div className="rotate-90 text-center text-lg font-semibold tracking-wide w-full">Goal</div>
+                                        </div>
+                                        :
+                                        null
+                                    }
                                     <div onClick={() => onRoadTileClick(index)} key={index} className="" >
                                         <ul className="flex flex-col-reverse">
                                             {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
@@ -110,6 +117,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                         :
                                         null
                                     }
+
 
                                 </>
 

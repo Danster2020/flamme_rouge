@@ -30,14 +30,22 @@ const roadTile2 = {
     properties: ["start"]
 }
 
+const roadTile3 = {
+    lanes: 2,
+    bikes: [],
+    properties: ["goal"]
+}
+
 let road = []
 
 for (let index = 0; index < 15; index++) {
 
     if (index < 5) {
         road.push(roadTile2 as RoadTile)
-    } else {
+    } else if (index < 10) {
         road.push(roadTile1 as RoadTile)
+    } else {
+        road.push(roadTile3 as RoadTile)
     }
 }
 // ------
@@ -153,7 +161,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
         energy: {
             onBegin: ({ G, ctx, effects, events }) => {
 
-                if (G.road[road.length - 1].bikes.length > 0) {
+                if (isGameOver(G)) {
                     events.endGame();
                 }
 
@@ -394,4 +402,17 @@ function allBikesPlaced(G, ctx) {
         }
     }
     return true
+}
+
+function isGameOver(G) {
+
+    const road = G.road
+
+    for (let i = 0; i < road.length; i++) {
+        const tile = road[i];
+        if (tile.bikes.length > 0 && tileHasProperty(tile, "goal")) {
+            return true
+        }
+    }
+    return false
 }
