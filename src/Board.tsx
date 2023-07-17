@@ -96,7 +96,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                 <>
                                     {tileHasProperty(roadTile, "goal") && !tileHasProperty(getRoadTile(G, index - 1), "goal") ?
                                         <div className="bg-white flex flex-col justify-center rounded-lg">
-                                            <div className="rotate-90 text-center text-lg font-semibold tracking-wide w-full">Goal</div>
+                                            <div className="rotate-90 text-center font-semibold tracking-wide w-full">Goal</div>
                                         </div>
                                         :
                                         null
@@ -112,7 +112,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                     </div>
                                     {tileHasProperty(roadTile, "start") && !tileHasProperty(getRoadTile(G, index + 1), "start") ?
                                         <div className="bg-white flex flex-col justify-center rounded-lg">
-                                            <div className="rotate-90 text-center text-lg font-semibold tracking-wide w-full">Start</div>
+                                            <div className="rotate-90 text-center font-semibold tracking-wide w-full">Start</div>
                                         </div>
                                         :
                                         null
