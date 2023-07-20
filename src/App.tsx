@@ -10,22 +10,39 @@ import { EffectsBoardWrapper } from 'bgio-effects/react';
 const wrappedBoard = EffectsBoardWrapper(BoardFlammeRouge, {
     updateStateAfterEffects: true,
 });
+
+function envType() {
+    console.log("current ENV: " + process.env.NODE_ENV);
+
+    if (process.env.NODE_ENV === 'production') {
+        return SocketIO({ server: 'localhost:8000' });
+    } else {
+        return Local();
+    }
+}
+
 const ClientFlammeRouge = Client({
     game: GameFlammeRouge,
     board: wrappedBoard,
-    multiplayer: Local(),
+    // multiplayer: Local(),
     // multiplayer: SocketIO({ server: 'localhost:8000' }),
+    multiplayer: envType()
 });
 
 
-const App = () => (
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Home></Home>} />
-            <Route path="0" element={<ClientFlammeRouge matchID="0" playerID="0" />} />
-            <Route path="1" element={<ClientFlammeRouge matchID="0" playerID="1" />} />
-        </Routes>
-    </BrowserRouter>
-);
+const App = () => {
+
+    return (
+
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home></Home>} />
+                <Route path="0" element={<ClientFlammeRouge matchID="0" playerID="0" />} />
+                <Route path="1" element={<ClientFlammeRouge matchID="0" playerID="1" />} />
+            </Routes>
+        </BrowserRouter>
+
+    )
+}
 
 export default App
