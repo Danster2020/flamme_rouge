@@ -15,7 +15,7 @@ function envType() {
     console.log("current ENV: " + process.env.NODE_ENV);
 
     if (process.env.NODE_ENV === 'production') {
-        return SocketIO({ server: 'localhost:8000' });
+        return SocketIO({ server: 'localhost:8001' });
     } else {
         return Local();
     }
