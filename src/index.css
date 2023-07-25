@@ -3,32 +3,51 @@
 @tailwind utilities;
 
 
+.movement_tile {
+  background-image: none !important;
+  @apply bg-yellow-300;
+}
+
+.slip_stream_tile {
+  background-image: none !important;
+  @apply bg-blue-600;
+}
+
 .animate_movement {
+  background-image: none !important;
   animation: pulse1 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   animation-delay: 0s;
 }
 
 .animate_slip_stream {
+  background-image: none !important;
   animation: pulse2 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   animation-delay: 0s;
 }
 
 @keyframes pulse1 {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: .5;
-      @apply bg-yellow-300;
-    }
+
+  0%,
+  100% {
+    opacity: 1;
   }
 
-  @keyframes pulse2 {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: .5;
-      @apply bg-blue-500;
-    }
+  50% {
+    opacity: .5;
+    @apply bg-yellow-300;
+
   }
+}
+
+@keyframes pulse2 {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .5;
+    @apply bg-blue-500;
+  }
+}

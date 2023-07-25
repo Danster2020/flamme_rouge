@@ -90,19 +90,19 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
 
                     <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})` }}>
-                        <div className="flex mt-2">
+                        <div className="flex w-[71rem] flex-wrap mt-2">
                             {G.road.map((roadTile, index: number) =>
 
                                 <>
                                     {tileHasProperty(roadTile, "goal") && !tileHasProperty(getRoadTile(G, index - 1), "goal") ?
-                                        <div className="bg-white flex flex-col justify-center rounded-lg">
+                                        <div className="bg-white flex flex-col justify-center rounded-lg mb-8">
                                             <div className="rotate-90 text-center font-semibold tracking-wide w-full">Goal</div>
                                         </div>
                                         :
                                         null
                                     }
                                     <div onClick={() => onRoadTileClick(index)} key={index} className="" >
-                                        <ul className="flex flex-col-reverse">
+                                        <ul className="flex flex-col-reverse mb-8 bg-gray-400">
                                             {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
                                                 <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>,
@@ -111,7 +111,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                         </ul>
                                     </div>
                                     {tileHasProperty(roadTile, "start") && !tileHasProperty(getRoadTile(G, index + 1), "start") ?
-                                        <div className="bg-white flex flex-col justify-center rounded-lg">
+                                        <div className="bg-white flex flex-col justify-center rounded-lg mb-8">
                                             <div className="rotate-90 text-center font-semibold tracking-wide w-full">Start</div>
                                         </div>
                                         :

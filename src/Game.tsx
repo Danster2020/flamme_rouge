@@ -6,11 +6,25 @@ import { Game } from 'boardgame.io';
 import { tileHasProperty } from './model/Road';
 
 // SETUP
+
+// TESTING
 const startDeckR1 = [1, 2, 3, 4]
 const startDeckS1 = [1, 2, 3, 4]
-
 const startDeckR2 = [1, 2, 3, 4]
 const startDeckS2 = [1, 2, 3, 4]
+
+// REAL DECKS
+const startDeckR = [
+    3, 4, 5, 6, 7,
+    3, 4, 5, 6, 7,
+    3, 4, 5, 6, 7
+]
+
+const startDeckS = [
+    2, 3, 4, 5, 9,
+    2, 3, 4, 5, 9,
+    2, 3, 4, 5, 9
+]
 
 export interface RoadTile {
     lanes: 2,
@@ -37,12 +51,12 @@ const roadTile3 = {
 }
 
 let road = []
-
-for (let index = 0; index < 15; index++) {
+const roadLength = 75
+for (let index = 0; index < roadLength; index++) {
 
     if (index < 5) {
         road.push(roadTile2 as RoadTile)
-    } else if (index < 10) {
+    } else if (index < roadLength - 5) {
         road.push(roadTile1 as RoadTile)
     } else {
         road.push(roadTile3 as RoadTile)
@@ -64,6 +78,12 @@ export interface Player {
     recyDeckR: any[];
     recyDeckS: any[];
     deckS: any[]; // Replace 'any' with the appropriate type for the deckS
+}
+
+let gamePlayers = {}
+
+for (let i = 0; i < 2; i++) {
+    gamePlayers[i.toString()] = { name: "P" + i, bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR, recyDeckR: [], deckS: startDeckS, recyDeckS: [] } as Player
 }
 
 export enum BikerType {
@@ -98,10 +118,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
         road: road,
         discardPile: [],
         nrOfMovedBikes: 0,
-        players: {
-            '0': { name: "P1", bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR1, recyDeckR: [], deckS: startDeckS1, recyDeckS: [] } as Player,
-            '1': { name: "P2", bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR2, recyDeckR: [], deckS: startDeckS2, recyDeckS: [] } as Player,
-        },
+        players: gamePlayers
     }),
 
     // playerView: PlayerView.STRIP_SECRETS,
