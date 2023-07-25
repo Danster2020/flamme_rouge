@@ -12,6 +12,7 @@ import backgroundImg from "./assets/img/grass.jpg"
 import CardDecks from "./CardDecks";
 import { Hand } from "./Hand";
 import { getRoadTile, tileHasProperty } from "./model/Road";
+import { RecDeckDialog } from "./RecDeckDialog";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -81,9 +82,13 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
             <Toaster position="bottom-center" />
 
+
+
+
             <StateBar></StateBar>
 
             <PlayerList></PlayerList>
+
 
             <TransformWrapper doubleClick={{ disabled: true }}>
                 <TransformComponent>
