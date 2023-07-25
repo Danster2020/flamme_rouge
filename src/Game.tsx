@@ -341,20 +341,23 @@ function drawCard(G: any, playerID, type: BikerType) {
     }
 
     if (deck.length > 0) {
+        deck = shuffleDeck(deck)
         hand.push(deck.pop())
     }
+    // if there are cards in recycle deck
     else if (recyDeck.length > 0) {
 
-        // for each card in recycle deck
+        // add all recycled cards back to deck
         const dLength = recyDeck.length
         for (let i = 0; i < dLength; i++) {
             deck.push(recyDeck.pop())
         }
 
+        // shuffle the deck
         deck = shuffleDeck(deck)
 
-
-        // hand.push(deck.pop())
+        // draw card from deck
+        hand.push(deck.pop())
     }
     // if the player has run out of cards
     else {

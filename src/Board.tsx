@@ -82,9 +82,6 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
             <Toaster position="bottom-center" />
 
-
-
-
             <StateBar></StateBar>
 
             <PlayerList></PlayerList>
@@ -95,7 +92,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
 
                     <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})` }}>
-                        <div className="flex w-[71rem] flex-wrap mt-2">
+                        <div className="flex w-[71rem] flex-wrap mt-2 scale-[0.2] -translate-x-[25rem] md:scale-50 md:-translate-x-40 lg:scale-100 lg:translate-x-0">
                             {G.road.map((roadTile, index: number) =>
 
                                 <>
@@ -135,7 +132,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
             <CardDecks G={G} onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
 
-            <Hand G={G} playerID={playerID} onCardClick={onCardClick}></Hand>
+            <Hand G={G} ctx={ctx} playerID={playerID} onCardClick={onCardClick}></Hand>
         </>
     );
 }
