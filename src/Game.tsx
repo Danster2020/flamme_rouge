@@ -123,6 +123,18 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
     // playerView: PlayerView.STRIP_SECRETS,
 
+    ai: {
+        enumerate: (G, ctx) => {
+            let moves = [];
+            for (let i = 0; i < 9; i++) {
+                if (G.cells[i] === null) {
+                    moves.push({ move: 'clickCell', args: [i] });
+                }
+            }
+            return moves;
+        },
+    },
+
     phases: {
 
         gameSetup: {
@@ -312,6 +324,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
 
 // draws one card
+// FIXME player gets less cards than 4 even tough there are cards left
 function drawCard(G: any, playerID, type: BikerType) {
     const player = G.players[playerID];
 
