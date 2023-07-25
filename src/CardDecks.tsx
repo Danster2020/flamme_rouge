@@ -3,8 +3,11 @@ import { BikerType } from './Game'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { RecDeckDialog } from './RecDeckDialog'
+import { useEffectListener, useLatestPropsOnEffect } from 'bgio-effects/react';
 
-export default function CardDecks({ G, onRslotClick, onSslotClick, playerID }) {
+export default function CardDecks({ onRslotClick, onSslotClick, playerID }) {
+
+    const { G } = useLatestPropsOnEffect("bikeMoved", "exhaustion");
 
     const deckClass = "w-24 h-36 p-2 rounded-md border-4 border-gray-800 m-4 bg-gray-300"
 

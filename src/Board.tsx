@@ -87,17 +87,17 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
             <PlayerList></PlayerList>
 
 
-            <TransformWrapper doubleClick={{ disabled: true }}>
+            <TransformWrapper doubleClick={{ disabled: true }} pinch={{ step: 100 }}>
                 <TransformComponent>
 
 
-                    <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})` }}>
+                    <div className="pt-20 pl-10 w-screen h-screen" style={{ backgroundImage: `url(${backgroundImg})`, backgroundSize: "21%" }}>
                         <div className="flex w-[71rem] flex-wrap mt-2 scale-[0.2] -translate-x-[25rem] md:scale-50 md:-translate-x-40 lg:scale-100 lg:translate-x-0">
                             {G.road.map((roadTile, index: number) =>
 
                                 <>
                                     {tileHasProperty(roadTile, "goal") && !tileHasProperty(getRoadTile(G, index - 1), "goal") ?
-                                        <div className="bg-white flex flex-col justify-center rounded-lg mb-8">
+                                        <div className="bg-white flex flex-col justify-center mb-8">
                                             <div className="rotate-90 text-center font-semibold tracking-wide w-full">Goal</div>
                                         </div>
                                         :
@@ -113,7 +113,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                         </ul>
                                     </div>
                                     {tileHasProperty(roadTile, "start") && !tileHasProperty(getRoadTile(G, index + 1), "start") ?
-                                        <div className="bg-white flex flex-col justify-center rounded-lg mb-8">
+                                        <div className="bg-white flex flex-col justify-center mb-8">
                                             <div className="rotate-90 text-center font-semibold tracking-wide w-full">Start</div>
                                         </div>
                                         :
@@ -130,9 +130,9 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                 </TransformComponent>
             </TransformWrapper>
 
-            <CardDecks G={G} onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
+            <CardDecks onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
 
-            <Hand G={G} ctx={ctx} playerID={playerID} onCardClick={onCardClick}></Hand>
+            <Hand playerID={playerID} onCardClick={onCardClick}></Hand>
         </>
     );
 }

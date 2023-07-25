@@ -1,9 +1,11 @@
-import React from 'react'
+import { useEffectListener, useLatestPropsOnEffect } from 'bgio-effects/react';
 
 import cardArtNormal from "./assets/img/card_art_normal.png"
 import { getBikeType } from './model/Bike'
 
-export const Hand = ({ G, ctx, playerID, onCardClick }) => {
+export const Hand = ({ playerID, onCardClick }) => {
+
+    const { G } = useLatestPropsOnEffect("bikeMoved", "exhaustion");
 
     const cardType = () => {
 
