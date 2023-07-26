@@ -11,6 +11,7 @@ COPY . /app
 RUN yarn install --frozen-lockfile
 
 RUN yarn build
+RUN yarn build:server
 
 # ==== RUN =======
 ENV NODE_ENV production
