@@ -10,18 +10,17 @@ export const RoadTile = (props: { laneIndex, index, moveObj, exhaustionObj, road
 
     function displayEffect() {
 
+        if (ctx.phase === "exhaustion") {
+            return "exhaustion_tile"
+        }
         if (ctx.phase === "slipStream") {
             return "slip_stream_tile"
         }
-        else if (ctx.phase === "movement") {
+        if (ctx.phase === "movement") {
             return "movement_tile"
         }
-        else if (ctx.phase === "exhaustion") {
-            return "exhaustion_tile"
-        }
-        else {
-            return null
-        }
+
+        return null
 
     }
 

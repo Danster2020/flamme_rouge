@@ -71,6 +71,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
     useEffectListener('effects:end', () => {
         setMoveObj(null)
+        setExhaustionObj(null)
     }, []);
 
     useEffect(() => {
