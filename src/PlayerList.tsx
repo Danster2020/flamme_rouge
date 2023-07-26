@@ -21,7 +21,7 @@ export const PlayerList = () => {
             <div className='fixed top-0 left-0 z-10'>
                 <ul className='relative flex flex-col m-2'>
                     {[...Array(ctx.numPlayers)].map((test, index: number) =>
-                        <li className='mb-2' key={index}>
+                        <li className='mb-2 self-start' key={index}>
                             <div className={`flex items-center pl-2 ${playerColor(index)} rounded-md shadow-lg`}>
                                 <span className='block w-4 h-4 border-2 border-white bg-green-400 rounded-full'></span>
                                 <span className='ml-2 text-white'>Player {index}</span>
