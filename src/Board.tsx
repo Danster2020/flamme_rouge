@@ -13,6 +13,7 @@ import CardDecks from "./CardDecks";
 import { Hand } from "./Hand";
 import { getRoadTile, tileHasProperty } from "./model/Road";
 import { RecDeckDialog } from "./RecDeckDialog";
+import { getBikeID, getBikeLane, getBikePosition } from "./model/Bike";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -23,6 +24,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
     const onCardClick = (index: number) => moves.selectCard(index);
 
     const [moveObj, setMoveObj] = useState(null)
+    const [exhaustionObj, setExhaustionObj] = useState(null)
 
     useEffectListener('bikeMoved', (obj) => {
         setMoveObj(obj)
@@ -39,6 +41,11 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
     useEffectListener('exhaustion', (obj) => {
 
+
+        let bikePosObj = { position: obj.position, lane: obj.lane }
+
+        setExhaustionObj(bikePosObj)
+
         let bikeTypeString = ""
         if (obj.bikeType === BikerType.ROULEUR) {
             bikeTypeString = "Rouleur"
@@ -49,6 +56,15 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
         toast("Spelare" + (obj.playerID + 1) + " " + bikeTypeString + " utmattas.", {
             icon: '😥',
         });
+
+        // required to delay moves
+        const timer = setTimeout(() => {
+            if (playerID === "0") {
+                events.endPhase()
+            }
+
+        }, 2000);
+        return () => clearTimeout(timer);
 
     }, []);
 
@@ -107,7 +123,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
                                         <ul className="flex flex-col-reverse mb-8 bg-gray-400">
                                             {[...Array(roadTile.lanes)].map((lane, laneIndex: number) =>
 
-                                                <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>,
+                                                <RoadTile laneIndex={laneIndex} index={index} moveObj={moveObj} exhaustionObj={exhaustionObj} roadTile={roadTile} getBikeName={getBikeName}></RoadTile>,
 
                                             )}
                                         </ul>

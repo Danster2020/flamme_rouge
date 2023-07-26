@@ -119,7 +119,8 @@ export function handOutExhaustionCards(G, ctx, effects) {
                         player.deckS.push(2)
                     }
 
-                    effects.exhaustion({ playerID: playerID, bikeType: bikeType })
+                    const bikeLane = getBikeLane(G, bikeID)
+                    effects.exhaustion({ playerID: playerID, bikeType: bikeType, position: currentBikePos, lane: bikeLane })
                 }
             }
         }
@@ -139,6 +140,15 @@ export function getBikeType(G, ctx, bikeID): BikerType {
         }
     }
     return null
+}
+
+export function getBikeID(G, playerID, bikeType) {
+
+    if (bikeType === BikerType.ROULEUR) {
+        return G.players[playerID].bikeR_ID
+    } else {
+        return G.players[playerID].bikeS_ID
+    }
 }
 
 

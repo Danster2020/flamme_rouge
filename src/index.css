@@ -13,6 +13,11 @@
   @apply bg-blue-600;
 }
 
+.exhaustion_tile {
+  background-image: none !important;
+  @apply bg-red-600;
+}
+
 .animate_movement {
   background-image: none !important;
   animation: pulse1 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;

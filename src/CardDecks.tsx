@@ -64,7 +64,7 @@ export default function CardDecks({ onRslotClick, onSslotClick, playerID }) {
                         </button>
                         <button onClick={() => onRslotClick(BikerType.ROULEUR)} className={deckClass}>
                             <div className={divClass}>
-                                R {G.players[playerID].cardR}
+                                R {G?.players[playerID]?.cardR}
                             </div>
                         </button>
                     </div>
@@ -75,7 +75,7 @@ export default function CardDecks({ onRslotClick, onSslotClick, playerID }) {
                         </button>
                         <button onClick={() => onSslotClick(BikerType.SPRINTEUR)} className={deckClass}>
                             <div className={divClass}>
-                                S {G.players[playerID].cardS}
+                                S {G?.players[playerID]?.cardS}
                             </div>
                         </button>
                     </div>

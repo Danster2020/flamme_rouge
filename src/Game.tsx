@@ -305,7 +305,7 @@ export const GameFlammeRouge: Game<any, any, any> = {
                 effects.refresh()
 
                 handOutExhaustionCards(G, ctx, effects)
-                events.endPhase()
+                // events.endPhase()
             },
             next: "energy"
         },
