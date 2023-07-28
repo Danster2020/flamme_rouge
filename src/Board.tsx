@@ -14,6 +14,7 @@ import { Hand } from "./Hand";
 import { getRoadTile, tileHasProperty } from "./model/Road";
 import { RecDeckDialog } from "./RecDeckDialog";
 import { getBikeID, getBikeLane, getBikePosition } from "./model/Bike";
+import { RuleBook } from "./RuleBook";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -148,6 +149,8 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
             </TransformWrapper>
 
             <CardDecks onRslotClick={onRslotClick} onSslotClick={onSslotClick} playerID={playerID} ></CardDecks>
+
+            <RuleBook></RuleBook>
 
             <Hand playerID={playerID} onCardClick={onCardClick}></Hand>
         </>
