@@ -7,29 +7,34 @@ export const StateBar = () => {
     const phaseDisplay = () => {
 
         if (ctx.phase === "gameSetup") {
-            return "Placera cyklar"
+            return "Cyklistplacering"
         }
         else if (ctx.phase === "energy") {
-            return "Dra kort 🖐️"
+            return "Kortdragning 🖐️"
         }
         else if (ctx.phase === "slipStream") {
-            return "Slip stream ⚡"
+            return "Slipstream ⚡"
         }
         else if (ctx.phase === "movement") {
-            return "Movement 🚲"
+            return "Förflyttning 🚲"
         }
         else if (ctx.phase === "exhaustion") {
-            return "Exhaustion 💨"
+            return "Utmattning 💨"
         }
         else {
-            return null
+            return "Spelet avslutat"
         }
     }
 
     return (
         <div className="fixed top-0 w-full z-10">
-            <div className="relative flex justify-center gap-2 mb-4 ">
-                <div className="bg-blue-200 p-2 text-xl">Phase: <span className='font-bold'>{phaseDisplay()}</span></div>
+            <div className="relative flex justify-center gap-2">
+                <div className="relative text-gray-300 bg-amber-900 border-2 border-amber-950 p-2 text-xl rounded-b-lg shadow-inner">
+                    <span className='font-bold'>{phaseDisplay()}</span>
+                </div>
+            </div>
+            <div className="relative flex justify-center">
+                <div className='text-sm text-gray-300 bg-amber-900 border-2 border-amber-950 rounded-xl p-y px-3 -m-2 shadow-inner'>Fas</div>
             </div>
         </div>
     )
