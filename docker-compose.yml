@@ -1,12 +1,13 @@
 version: '3'
 services:
 
-  myapp:
+  game-app:
     container_name: flamme_rouge-container
+    working_dir: /app
     pull_policy: build
     ports:
       - 3000:3000
-    command: "serve ./build"
+    command: "serve -s build"
     build:
       context: .
       dockerfile: Dockerfile
@@ -21,3 +22,8 @@ services:
       - "8001:8001"
     command: "node -r esm ./build/server/server.js"
     restart: unless-stopped
+
+
+
+  #yarn serve
+  #yarn start

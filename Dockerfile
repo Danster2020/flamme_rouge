@@ -13,8 +13,10 @@ RUN yarn install --frozen-lockfile
 RUN yarn build
 RUN yarn build:server
 
+RUN npm install -g serve
+
 # ==== RUN =======
 ENV NODE_ENV production
 
 # Start the app
-CMD ["node", "-r", "esm", "./build/server/server.js"]
+# CMD ["node", "-r", "esm", "./build/server/server.js"]
