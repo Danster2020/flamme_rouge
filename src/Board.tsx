@@ -15,6 +15,7 @@ import { getRoadTile, tileHasProperty } from "./model/Road";
 import { RecDeckDialog } from "./RecDeckDialog";
 import { getBikeID, getBikeLane, getBikePosition } from "./model/Bike";
 import { RuleBook } from "./RuleBook";
+import { Settings } from "./Settings";
 
 
 export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
@@ -104,6 +105,7 @@ export function BoardFlammeRouge({ ctx, G, moves, playerID, events }) {
 
             <PlayerList></PlayerList>
 
+            <Settings></Settings>
 
             <TransformWrapper doubleClick={{ disabled: true }} pinch={{ step: 100 }}>
                 <TransformComponent>

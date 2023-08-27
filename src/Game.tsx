@@ -83,7 +83,7 @@ export interface Player {
 let gamePlayers = {}
 
 for (let i = 0; i < 2; i++) {
-    gamePlayers[i.toString()] = { name: "P" + i, bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR, recyDeckR: [], deckS: startDeckS, recyDeckS: [] } as Player
+    gamePlayers[i.toString()] = { name: "Spelare " + i, bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR, recyDeckR: [], deckS: startDeckS, recyDeckS: [] } as Player
 }
 
 export enum BikerType {
@@ -318,7 +318,9 @@ export const GameFlammeRouge: Game<any, any, any> = {
 
     moves: {
 
-
+        updateName: ({ G, ctx, playerID, name }) => {
+            G.players[playerID].name = name;
+        }
     },
 };
 

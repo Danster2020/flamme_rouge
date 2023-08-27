@@ -1,9 +1,14 @@
 import { useLatestPropsOnEffect } from 'bgio-effects/react';
+import { useEffect } from 'react';
 
 export const PlayerList = () => {
     const { G, ctx, playerID } = useLatestPropsOnEffect('bikeMoved');
 
     const doneConditions = ["selectedCards", "hasPlacedBikes"]
+
+    useEffect(() => {
+        console.log("playerName:", G.players[playerID].name);
+    }, [G])
 
     function playerColor(index) {
         switch (index) {
@@ -24,7 +29,7 @@ export const PlayerList = () => {
                         <li className='mb-2 self-start' key={index}>
                             <div className={`flex items-center pl-2 ${playerColor(index)} rounded-md shadow-lg`}>
                                 <span className='block w-4 h-4 border-2 border-white bg-green-400 rounded-full'></span>
-                                <span className='ml-2 text-white'>Player {index}</span>
+                                <span className='ml-2 text-white'>{G.players[index].name}</span>
 
                                 {ctx.activePlayers !== null && doneConditions.includes(ctx.activePlayers[index]) ?
                                     <span className='ml-2 py-1 w-7 bg-green-500 border-l-2 border-white text-white text-center rounded-r-md'>✓</span>

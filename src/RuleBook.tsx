@@ -12,7 +12,6 @@ export const RuleBook = () => {
                         <FontAwesomeIcon className='' icon={icon({ name: 'question' })} />
                     </a>
                 </div>
-
             </div>
         </div>
     )

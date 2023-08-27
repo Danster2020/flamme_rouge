@@ -34,7 +34,6 @@ const ClientFlammeRouge = Client({
 const App = () => {
 
     return (
-
         <>
             <Helmet>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -48,9 +47,6 @@ const App = () => {
                 </Routes>
             </BrowserRouter>
         </>
-
-
-
     )
 }
 
