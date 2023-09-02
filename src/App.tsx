@@ -26,7 +26,6 @@ const ClientFlammeRouge = Client({
     game: GameFlammeRouge,
     board: wrappedBoard,
     // multiplayer: Local(),
-    // multiplayer: SocketIO({ server: 'localhost:8000' }),
     multiplayer: envType()
 });
 
