@@ -3,7 +3,7 @@ import { GameFlammeRouge } from "./Game";
 
 const server = Server({
     games: [GameFlammeRouge],
-    origins: [Origins.LOCALHOST],
+    origins: [Origins.LOCALHOST_IN_DEVELOPMENT, "192.168.1.5"],
 });
 
 const server_port = 8001;
