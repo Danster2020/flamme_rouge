@@ -15,6 +15,7 @@ services:
 
   esm-server:
     container_name: esm-server-container
+    pull_policy: build
     build:
       context: .
       dockerfile: Dockerfile
