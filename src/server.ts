@@ -3,7 +3,7 @@ import { GameFlammeRouge } from "./Game";
 
 const server = Server({
     games: [GameFlammeRouge],
-    origins: [Origins.LOCALHOST],
+    origins: ["http://esm-server-container"],
 });
 
 const server_port = 8001;
