@@ -4,6 +4,7 @@ import { handOutExhaustionCards, moveFurthestBike, runSlipStream } from './model
 import { EffectsPlugin } from 'bgio-effects/plugin';
 import { Game } from 'boardgame.io';
 import { tileHasProperty } from './model/Road';
+import { nrOfPlayers } from './gameConfig';
 
 // SETUP
 
@@ -82,7 +83,7 @@ export interface Player {
 
 let gamePlayers = {}
 
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < nrOfPlayers; i++) {
     gamePlayers[i.toString()] = { name: "Spelare " + i, bikeR_ID: uuid(), bikeS_ID: uuid(), nrOfPlacedBikes: 0, selectingR: false, selectingS: false, cardR: null, cardS: null, hand: [], deckR: startDeckR, recyDeckR: [], deckS: startDeckS, recyDeckS: [] } as Player
 }
 

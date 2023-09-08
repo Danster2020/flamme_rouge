@@ -3,6 +3,9 @@ import bike_red_s from "./assets/img/bike_red_s.png"
 import bike_blue_r from "./assets/img/bike_blue_r.png"
 import bike_blue_s from "./assets/img/bike_blue_s.png"
 
+import bike_green_r from "./assets/img/bike_green_r.png"
+import bike_green_s from "./assets/img/bike_green_s.png"
+
 import { getPlayerID } from "./model/Player"
 import { getBikeType } from "./model/Bike"
 import { BikerType } from "./Game"
@@ -26,6 +29,13 @@ export const BikeSprite = ({ G, ctx, bike_ID }) => {
                 return bike_blue_r
             } else {
                 return bike_blue_s
+            }
+        }
+        if (playerID === "2") {
+            if (bikeType === BikerType.ROULEUR) {
+                return bike_green_r
+            } else {
+                return bike_green_s
             }
         }
     }

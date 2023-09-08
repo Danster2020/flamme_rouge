@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './Home';
 import { EffectsBoardWrapper } from 'bgio-effects/react';
 import { Helmet } from "react-helmet";
+import { nrOfPlayers } from './gameConfig';
 
 
 const wrappedBoard = EffectsBoardWrapper(BoardFlammeRouge, {
@@ -41,8 +42,14 @@ const App = () => {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Home></Home>} />
-                    <Route path="0" element={<ClientFlammeRouge matchID="0" playerID="0" />} />
-                    <Route path="1" element={<ClientFlammeRouge matchID="0" playerID="1" />} />
+
+
+                    {[...Array(nrOfPlayers)].map((i, index: number) =>
+                        <Route key={index} path={index.toString()} element={<ClientFlammeRouge matchID="0" playerID={index.toString()} />} />
+                    )}
+
+                    {/* <Route path="0" element={<ClientFlammeRouge matchID="0" playerID="0" />} />
+                    <Route path="1" element={<ClientFlammeRouge matchID="0" playerID="1" />} /> */}
                 </Routes>
             </BrowserRouter>
         </>
