@@ -1,1 +1,1 @@
-export const nrOfPlayers = 4;
+export const nrOfPlayers = 5;

@@ -119,22 +119,13 @@ export const GameFlammeRouge: Game<any, any, any> = {
         road: road,
         discardPile: [],
         nrOfMovedBikes: 0,
-        players: gamePlayers
+        players: gamePlayers,
     }),
 
-    // playerView: PlayerView.STRIP_SECRETS,
+    minPlayers: 2,
+    maxPlayers: 10,
 
-    ai: {
-        enumerate: (G, ctx) => {
-            let moves = [];
-            for (let i = 0; i < 9; i++) {
-                if (G.cells[i] === null) {
-                    moves.push({ move: 'clickCell', args: [i] });
-                }
-            }
-            return moves;
-        },
-    },
+    // playerView: PlayerView.STRIP_SECRETS,
 
     phases: {
 

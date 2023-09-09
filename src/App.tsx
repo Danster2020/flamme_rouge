@@ -26,6 +26,7 @@ function envType() {
 const ClientFlammeRouge = Client({
     game: GameFlammeRouge,
     board: wrappedBoard,
+    numPlayers: nrOfPlayers,
     // multiplayer: Local(),
     multiplayer: envType()
 });

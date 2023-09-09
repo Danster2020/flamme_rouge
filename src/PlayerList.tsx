@@ -16,6 +16,12 @@ export const PlayerList = () => {
                 return "bg-red-800"
             case 1:
                 return "bg-blue-800"
+            case 2:
+                return "bg-green-800"
+            case 3:
+                return "bg-yellow-500"
+            case 4:
+                return "bg-pink-400"
             default:
                 return "bg-gray-400"
         }
