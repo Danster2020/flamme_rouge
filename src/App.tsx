@@ -8,6 +8,10 @@ import { EffectsBoardWrapper } from 'bgio-effects/react';
 import { Helmet } from "react-helmet";
 import { nrOfPlayers } from './gameConfig';
 
+const { protocol, hostname, port } = window.location;
+
+const serverConfig = `${protocol}//${hostname}:${port}`;
+
 
 const wrappedBoard = EffectsBoardWrapper(BoardFlammeRouge, {
     updateStateAfterEffects: true,
@@ -15,9 +19,10 @@ const wrappedBoard = EffectsBoardWrapper(BoardFlammeRouge, {
 
 function envType() {
     console.log("current ENV: " + process.env.NODE_ENV);
+    console.log("current server config:", serverConfig);
 
     if (process.env.NODE_ENV === 'production') {
-        return SocketIO({ server: 'localhost:8001' });
+        return SocketIO({ server: serverConfig });
     } else {
         return Local();
     }

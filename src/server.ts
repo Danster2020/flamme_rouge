@@ -1,9 +1,13 @@
 import { Origins, Server } from "boardgame.io/server";
 import { GameFlammeRouge } from "./Game";
 
+// const { protocol, hostname, port } = window.location;
+
+// console.log(hostname);
+
 const server = Server({
     games: [GameFlammeRouge],
-    origins: [Origins.LOCALHOST, "game-container", "esm-server-container"],
+    origins: [Origins.LOCALHOST, "game-container", "esm-server-container", "game-app", "esm-server"],
     // origins: ["http://game-container"],
 });
 
