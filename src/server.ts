@@ -18,5 +18,5 @@ const server = Server({
     // origins: ["http://game-container"],
 });
 
-const server_port = 8001;
+const server_port = 8000;
 server.run(server_port, () => console.log("esm server running on port " + server_port));
