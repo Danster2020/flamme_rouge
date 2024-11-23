@@ -22,8 +22,12 @@ function envType() {
     console.log("current server config:", serverConfig);
 
     if (process.env.NODE_ENV === 'production') {
-        return SocketIO({ server: serverConfig });
+        console.log("Running in production");
+
+        return SocketIO({ server: 'localhost:8001' });
     } else {
+        // return SocketIO({ server: 'localhost:3000' });
+        console.log("Running in development");
         return Local();
     }
 }

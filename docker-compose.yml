@@ -1,19 +1,19 @@
 version: '3'
 services:
 
-  game-app:
-    container_name: game-container
-    working_dir: /app
-    pull_policy: build
-    ports:
-      - "3000:3000"
-    command: "serve -s build"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    networks:
-    - my-network
+  # game-app:
+  #   container_name: game-container
+  #   working_dir: /app
+  #   pull_policy: build
+  #   ports:
+  #     - "3000:3000"
+  #   command: "serve -s build"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   networks:
+  #   - my-network
 
   esm-server:
     container_name: esm-server-container

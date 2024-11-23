@@ -19,6 +19,9 @@
     "bgio-effects": "^0.7.1",
     "boardgame.io": "^0.50.2",
     "esm": "^3.2.25",
+    "express": "^4.18.3",
+    "http-server": "^14.1.1",
+    "koa-static": "^5.0.0",
     "react": "^18.2.0",
     "react-confetti": "^6.1.0",
     "react-dom": "^18.2.0",
@@ -38,7 +41,9 @@
     "eject": "react-scripts eject",
     "build:server": "tsc -p tsconfig.server.json",
     "start:server": "node -r esm build/server/server.js",
-    "serve": "yarn build:server && yarn start:server"
+    "serve": "yarn build:server && yarn start:server",
+    "start_game_server": "yarn build && ./node_modules/.bin/http-server -p 8001 ./build",
+    "start_socket_server": "yarn build:server && node -r esm ./build/server/server.js"
   },
   "eslintConfig": {
     "extends": [
